@@ -1,0 +1,9 @@
+
+img{
+  display: block;
+  object-fit: cover;
+}
+
+#image{
+  max-width: 100%;
+}

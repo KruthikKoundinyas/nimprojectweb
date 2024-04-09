@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Nim Game</h2>
+
+    <button onclick="playGame()">Start Game</button>
+
+    <p id="game"></p>
+
+    <script>
+      var piles = [3, 4, 5];
+
+      function playGame() {
+        var gameText = "";
+        for (var i = 0; i < piles.length; i++) {
+          gameText += "Pile " + i + ": " + piles[i] + "<br>";
+        }
+        document.getElementById("game").innerHTML = gameText;
+      }
+    </script>
+  </body>
+</html>

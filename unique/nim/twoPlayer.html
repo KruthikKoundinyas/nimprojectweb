@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      sizes="32x32"
+      type="image/png"
+      href="https://en.pimg.jp/087/557/255/1/87557255.jpg"
+    />
+    <title>NIM The Game</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a href="./index.html"
+      ><div type="button" id="TwoPlayer" class="button">
+        return to main menu
+      </div></a
+    >
+    <h1 id="level-title">Press finnish button to Start</h1>
+    <div class="container">
+      <div class="row select">
+        <div type="button" id="but1" class="btn press"></div>
+      </div>
+      <div class="row select">
+        <div type="button" id="but2" class="btn press"></div>
+        <div type="button" id="but3" class="btn press"></div>
+        <div type="button" id="but4" class="btn press"></div>
+      </div>
+      <div class="row select">
+        <div type="button" id="but5" class="btn press"></div>
+        <div type="button" id="but6" class="btn press"></div>
+        <div type="button" id="but7" class="btn press"></div>
+        <div type="button" id="but8" class="btn press"></div>
+        <div type="button" id="but9" class="btn press"></div>
+      </div>
+      <button class="restart" class="button" onclick="location.reload();">
+        Restart</button
+      >;
+      <button class="finnish">Finnish</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./TwoPlayerGame.js" charset="UTF-8"></script>
+  </body>
+</html>

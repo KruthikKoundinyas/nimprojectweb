@@ -1,0 +1,593 @@
+console.log-->output
+eight different data types which are 
+undefined, null, boolean, string (""), symbol, bigint, number(numeric data), and object*/
+labels as pointers
+ We tell JavaScript to create or declare a variable by putting the keyword var in front of it and 
+end it with a semicolen */
+  you can store a value in a variable with the assignment operator (=)
+ you can assign the value of that variable to another variable
+It is common to initialize a variable to an initial value in the same line as it is declared.
+When JavaScript variables are declared, they have an initial value of undefined. 
+If you do a mathematical operation on an undefined variable your result will be NaN 
+which means "Not a Number". If you concatenate a string with an undefined variable, 
+you will get a string of undefined.*/
+/it is case-sencitive
+/Write variable names in JavaScript in camelCase. In camelCase, 
+multi-word variable names have the first word in lowercase and
+ the first letter of each subsequent word is capitalized.*/
+/let(less effective)-constant single time initialization
+/arithmetic operators: +,-,*,/,%
+/incriment/decrement operators: ++,--,+=,-=,*=,/=
+/for string escape a quote from considering it as an end of string quote by placing a backslash (\)
+/\'	single quote
+/"	double quote
+//	backslash
+\n	newline
+\t	tab
+\r	carriage return
+\b	backspace
+\f	form feed 
+\\  return backslash*/
+/ .length
+/indexing [0] or by .length -1 get the value at index
+string is immutable but can be reassigned complete
+/Arrays,{array within array}
+/multidimentional array==> a[][][]..
+*append data to the end of an array is via the push() method.{ arr.push(ele)}
+.pop() removes the last element from an array and returns that element.
+.shift() function to remove the first item
+unshift() adds the element at the beginning of the array.*/
+*You can call or invoke this function by using its name followed by parentheses, 
+like this: functionName(); Each time the function is called 
+it will exicute All of the code between the curly braces every time the function.*/
+*global-local variables if local var with same name as global is created 
+it takes precidence within function.*/
+/types of functions: withoutreturntypewithcall, withreturntypewithcall
+/Booleans may only be one of two values: true or false
+/if condition
+*If the values being compared are not of the same type, 
+the equality operator will perform a type conversion, 
+and then evaluate the values. 
+However, the strict equality operator will compare both the data type and value as-is, 
+without converting one type to the other.*/
+/The inequality operator (!=) is the opposite of the equality operator
+/The strict inequality operator (!==) is the logical opposite of the strict equality operators
+/ And-&&  Or-||
+/if-else loop
+/switch-case ; break; ===type   default
+*Objects are similar to arrays, except that instead of using indexes to access and modify their data, 
+you access the data in objects through what are called properties.[feels like stuctures]{course mentioned dictionaries}*/
+/objects{atributes:values;}
+/[atribute] or .atribute to call or change value
+/new atributes and values can be added using same method as calling/
+/delete object.atribute;  deletes the entire atribute along with value
+/To check if a property on a given object exists or not, you can use the .hasOwnProperty() method.
+/The sub-properties of objects can be accessed by chaining together the dot or bracket notation.
+looping Statements
+while (conditionn){indented block}
+for (a; b; c), where a is the initialization statement, b is the condition statement, and c is the final expression.
+do-while
+A function can call itself this is known as recurtion
+/Math.random() provides in decimal
+/Math.floor(Math.random()*limit(0 to ?)) floor ~= rounds off to closest whole number
+/Math.floor(Math.random() * (max - min + 1)) + min
+*parseInt("007") converts the string "007" to the integer 7 by parsing the numeric part of the string. 
+If the string starts with non-numeric characters, it returns NaN.*/
+*parseInt("007", 10) converts the string "007" to the base-10 integer 7.
+The second parameter (10) represents the radix or base of the numeral system.*/
+*The syntax is a ? b : c, where a is the condition, b is the code to run when the condition returns true, 
+and c is the code to run when the condition returns false.*/
+/conditional operator : a? b: c; a-condition b-if true c- if false
+/(a === b) ? "a and b are equal" : (a > b) ? "a is greater" : "b is greater" posible
+
+/concat arrays
+
+//---------------------------------------------------------------------------------------------
+/ES
+*different variables with unique values (0, 1, and 2) are created by the let keyword*/
+*assignment to a variable using const are still mutable. 
+Using the const declaration only prevents reassignment of the variable identifier.*/
+*Note:developers prefer to assign all their variables using const by default, 
+unless they know they will need to reassign the value. Only in that case, they use let.*/
+/*JavaScript provides a function Object.freeze to prevent data mutation.*/
+/*In JavaScript, we often don't need to name our functions, 
+especially when passing a function as an argument to another function. 
+Instead, we create inline functions. 
+We don't need to name these functions because we do not reuse them anywhere else.
+() => "value";*/
+//Just like a regular function, you can pass arguments into an arrow function.
+/*In order to help us create more flexible functions,
+ES6 introduces default parameters(emph.) for functions.*/
+//asign as (value = "some_val") => {} this gives some_val as default parameter.(like i in for loop).
+/*In order to help us create more flexible functions, ES6 introduces the rest parameter for function parameters.
+ With the rest parameter, you can create functions that take a variable number of arguments. 
+These arguments are stored in an array that can be accessed later from inside the function.*/
+// ...arr grt all array values unspecified
+//  {prop1,prop2}=object;
+//Destructuring enables assigning values to variables with new names using a colon. prop then name
+/*The spread operator unpacks all array contents into a comma-separated list, 
+lacking the ability to selectively assign specific elements to variables.*/
+//[a, b, ...arr] slices the a,b and the rest of the array works like slice
+/*Template literals allow you to create multi-line strings and 
+to use string interpolation features to create strings. &{multiline string}*/
+/*Template literals overview:
+
+Use backticks (`) instead of quotes (' or ").
+Enable multi-line strings without using \n.
+Improve string interpolation for variable insertion.
+String interpolation:
+
+${variable} syntax is a placeholder.
+No need for concatenation with the + operator.
+Easily include variables in strings by wrapping them with ${}.
+Expression inclusion:
+
+Embed expressions directly in the string.
+Example: ${a + b} can be used within the template literal.
+Advantages:
+
+Simplifies string creation and manipulation.
+Enhances code readability and maintainability.
+Provides flexibility for building robust strings.
+Usage:
+
+Replace traditional quotes with backticks for template literals.
+Leverage template literals for multi-line and dynamic string content.
+Overall impact:
+
+Eliminates the need for manual line breaks (\n) and string concatenation.
+Offers a more concise and expressive way to work with strings.*/
+/*Object Literal Declarations in ES6:
+
+ES6 simplifies object literal declarations.
+Redundancy reduction using syntactic sugar.
+Example Function:
+
+Original code:
+javascript
+Copy code
+const getMousePosition = (x, y) => ({
+  x: x,
+  y: y
+});
+Object Property Shorthand:
+
+New syntax eliminates redundancy.
+Write property name only once.
+Revised Function:
+
+Updated code:
+javascript
+Copy code
+const getMousePosition = (x, y) => ({ x, y });
+Advantages:
+
+Improved code conciseness.
+Enhanced readability.
+Reduces boilerplate code.
+Usage:
+
+Embrace object property shorthand for concise object literal declarations.
+Utilize this feature in functions returning objects with properties.*/
+/*ES5 Object Method Definition:
+
+Use the function keyword to define a method within an object.
+Syntax: propertyName: function() { / method body / }
+ES6 Object Method Definition:
+
+Remove the function keyword and colon when defining methods.
+Syntax: propertyName() { / method body / }
+Note: ES6 syntax simplifies the declaration of methods within objects, 
+making the code more concise and readable.*/
+/*ES6 Class Syntax for Constructors:
+
+In ES6, the class keyword is used to create objects.
+An ES6 class has a constructor method invoked with new.
+If not defined explicitly, the constructor is implicitly created with no arguments.
+Explicit Constructor Example:
+
+javascript
+Copy code
+class SpaceShuttle {
+  constructor(targetPlanet) {
+    this.targetPlanet = targetPlanet;
+  }
+  takeOff() {
+    console.log("To " + this.targetPlanet + "!");
+  }
+}
+Implicit Constructor Example:
+
+javascript
+Copy code
+class Rocket {
+  launch() {
+    console.log("To the moon!");
+  }
+}
+Creating Objects:
+
+Use new keyword with the class to instantiate objects.
+javascript
+Copy code
+const zeus = new SpaceShuttle('Jupiter');
+zeus.takeOff(); // prints "To Jupiter!"
+
+const atlas = new Rocket();
+atlas.launch(); // prints "To the moon!"
+Class Naming Convention:
+
+Follow the convention of using UpperCamelCase for ES6 class names.
+Example: SpaceShuttle
+Constructor Purpose:
+
+The constructor initializes objects created with a class.
+Special method for object creation and initialization.
+Important Note:
+
+Understanding classes and constructors is crucial for Object-Oriented Programming in JavaScript.
+Further details covered in the JavaScript Algorithms And Data Structures Certification's Object Oriented Programming section.*/
+
+Getter and Setter Short Notes:
+
+Purpose:
+
+Getter: Returns the value of a private variable without direct access.
+Setter: Modifies the value of a private variable based on input.
+Syntax:
+
+Getter: get propertyName() { return this._privateVariable; }
+Setter: set propertyName(updatedValue) { this._privateVariable = updatedValue; }
+Example:
+
+javascript
+Copy code
+class Book {
+  constructor(author) {
+    this._author = author;
+  }
+  // Getter
+  get writer() {
+    return this._author;
+  }
+  // Setter
+  set writer(updatedAuthor) {
+    this._author = updatedAuthor;
+  }
+}
+
+const novel = new Book('anonymous');
+console.log(novel.writer);      // Output: anonymous
+novel.writer = 'newAuthor';
+console.log(novel.writer);      // Output: newAuthor
+
+Usage:
+Provides controlled access to private variables.
+Enhances encapsulation by hiding implementation details.
+
+Convention:
+Precede the name of private variables with an underscore (_).
+
+Note:
+Use of underscore is a convention; it doesn't make a variable private by itself.
+
+1. **Introduction to JavaScript Modularity:**
+   - JavaScript initially played a small role in web development but has evolved to become a crucial language for building entire websites.
+   - ES6 introduced features to enhance code modularity, cleanliness, and maintainability.
+
+2. **Module Script in HTML:**
+   - To leverage ES6 module functionality, use the following script tag in HTML:
+     ```html
+     <script type="module" src="filename.js"></script>
+     ```
+
+3. **Purpose of Module Script:**
+   - Allows for the easy sharing of code among JavaScript files.
+   - Enhances code organization and maintainability.
+
+4. **Import and Export Features:**
+   - Enables the use of `import` and `export` statements within JavaScript files.
+   - Modules can export specific functionalities or variables for use in other modules.
+
+5. **Example Usage:**
+   - When a script is defined with `type="module"`, it gains the ability to import and export code.
+   - This promotes a modular coding approach, where functionalities are encapsulated in separate files.
+
+6. **Benefits of Modularity:**
+   - Facilitates code reuse and sharing.
+   - Improves code organization and readability.
+   - Eases maintenance and updates.
+
+7. **Implementation:**
+   - Create separate JavaScript files with modular functionalities.
+   - Use `import` statements to bring in specific functionalities where needed.
+   - Use `export` statements to expose functionalities from one module for use in another.
+
+8. **Conclusion:**
+   - Adopting module scripts in JavaScript enhances the overall structure and organization of code, promoting a more maintainable and scalable web development approach.
+
+- To share a code block in JavaScript, use the `export` keyword.
+- The common way to export a single function is by assigning it to a variable and then exporting it:
+
+```javascript
+export const add = (x, y) => {
+  return x + y;
+}
+```
+
+- Alternatively, you can define the function and then export it in a separate statement:
+
+```javascript
+const add = (x, y) => {
+  return x + y;
+}
+
+export { add };
+```
+
+- Exported functions or variables can be imported and used in other files without rewriting the code.
+- Multiple things can be exported by repeating the first example for each item or by listing them all in the export statement:
+
+```javascript
+export { add, subtract };
+```
+
+- This allows for clear and effective organization of code when working with multiple files in a JavaScript project.
+
+- **import { functionName } from 'file/path';**
+  - `import` allows selective loading of specific functions or variables from a module.
+  - Examples were shown using a math_functions.js file.
+  - **Syntax**: `import { add } from './math_functions.js';`
+  - `./` denotes the current folder; file extension (.js) is required.
+
+- **Importing Multiple Items**
+  - You can import more than one function by listing them in the import statement.
+  - Example: `import { add, subtract } from './math_functions.js';`
+
+- **Clear Steps for Importing:**
+  1. Use `import` keyword.
+  2. Specify the function or variable inside curly braces `{}`.
+  3. Mention the file/module path in single quotes.
+  4. For multiple imports, separate them with commas.
+
+- **Path Reference**
+  - Use `./` for the current folder.
+  - Ensure the correct file extension (e.g., .js).
+
+- **Selective Loading**
+  - `import` loads only the specified items, ignoring the rest of the module.
+
+- **Example**
+  ```javascript
+  import { add, subtract } from './math_functions.js';
+  ```
+
+- **Note:**
+  - Import is a powerful feature for code modularity and reusability in JavaScript.
+
+- **Importing Everything from a File:**
+  - Use `import * as <variableName> from "<fileName>";`
+  - Example: `import * as myMathModule from "./math_functions.js";`
+
+- **Object Creation:**
+  - Creates an object (e.g., `myMathModule`) to hold imported contents.
+  - Object can be named as desired.
+
+- **Accessing Imported Functions:**
+  - Access functions via object properties.
+  - Example:
+    ```javascript
+    myMathModule.add(2, 3);
+    myMathModule.subtract(5, 3);
+    ```
+  
+- **Flexibility in Variable Naming:**
+  - `<variableName>` can be chosen based on preference.
+
+- **Effective for Revising:**
+  - Enables concise and clear access to imported functions.
+  - Promotes modular and organized code structure.
+
+- **Export Default Syntax:**
+  - Used when only one value is being exported from a file.
+  - Creates a fallback value for a module.
+  - Allows only one default export per module.
+  - Cannot be used with var, let, or const.
+
+- **Syntax Examples:**
+  - Named Function as Default Export:
+    ```javascript
+    export default function add(x, y) {
+      return x + y;
+    }
+    ```
+
+  - Anonymous Function as Default Export:
+    ```javascript
+    export default function(x, y) {
+      return x + y;
+    }
+    ```
+
+- To import a default export in JavaScript, use the `import` keyword followed by the variable name of your choice.
+- The syntax is `import <variableName> from "<fileName>";`.
+- The file specified in the import statement should have a default export using the `export default` syntax.
+- The variable name used in the import statement is arbitrary and can be chosen freely.
+- The imported value is not enclosed in curly braces ({}), unlike when importing named exports.
+- Example: `import add from "./math_functions.js";` imports the default export (in this case, `add`) from the "math_functions.js" file.
+
+### JavaScript Promises:
+
+1. **Creating a Promise:**
+   - Promise is a constructor function.
+   - Use `new Promise((resolve, reject) => {})` syntax.
+   - Takes a function with `resolve` and `reject` parameters.
+
+2. **Completing a Promise:**
+   - Use `resolve` to fulfill the promise.
+   - Use `reject` to indicate failure.
+   - Example:
+     ```javascript
+     const myPromise = new Promise((resolve, reject) => {
+       if (condition) {
+         resolve("Promise was fulfilled");
+       } else {
+         reject("Promise was rejected");
+       }
+     });
+     ```
+
+3. **Handling a Fulfilled Promise with `then`:**
+   - Use `then` method on a promise.
+   - Executes immediately after promise is fulfilled.
+   - Takes a callback function with a parameter (result).
+   - Example:
+     ```javascript
+     myPromise.then(result => {
+       // Handle the fulfilled promise result here
+     });
+     ```
+
+4. **Handling a Rejected Promise with `catch`:**
+   - Use `catch` method on a promise.
+   - Executes immediately after promise is rejected.
+   - Takes a callback function with a parameter (error).
+   - Example:
+     ```javascript
+     myPromise.catch(error => {
+       // Handle the rejected promise error here
+     });
+     ```
+  
+5. **Note:**
+   - Promises have three states: pending, fulfilled, and rejected.
+   - Resolve and reject methods transition the promise to either fulfilled or rejected state.
+1. **Test Method in JavaScript:**
+   - Use the `.test()` method to apply a regular expression to a string and determine if there's a match.
+   - Example:
+     ```javascript
+     let testStr = "freeCodeCamp";
+     let testRegex = /Code/;
+     testRegex.test(testStr); // Returns true
+     ```
+
+2. **Match Literal Strings:**
+   - Use a regular expression for a literal match of a specific string.
+   - Example:
+     ```javascript
+     let testStr = "Hello, my name is Kevin.";
+     let testRegex = /Kevin/;
+     testRegex.test(testStr); // Returns true
+     ```
+
+3. **Match Literal String with Different Possibilities:**
+   - Use the alternation or OR operator (`|`) to match multiple patterns.
+   - Example:
+     ```javascript
+     let regex = /yes|no|maybe/;
+     ```
+
+4. **Ignore Case While Matching:**
+   - Use the `i` flag to ignore case differences in a regular expression.
+   - Example:
+     ```javascript
+     let caseInsensitiveRegex = /ignorecase/i;
+     // Matches: ignorecase, igNoreCase, IgnoreCase
+     ```
+
+These short notes provide a quick overview of using the test method, 
+matching literal strings, handling different possibilities, 
+and ignoring case in regular expressions in JavaScript.
+- Use the `.match()` method to extract matches from a string based on a regular expression.
+- Apply the method on a string and pass the regex inside the parentheses.
+- Example: `"Hello, World!".match(/Hello/);` returns `["Hello"]`.
+- You can assign a string and a regex to variables and then use the `.match()` method on the string variable.
+- Example: 
+  ```javascript
+  let ourStr = "Regular expressions";
+  let ourRegex = /expressions/;
+  ourStr.match(ourRegex); // returns ["expressions"]
+  ```
+- The syntax for `.match()` is opposite to the `.test()` method.
+  - `.match()` on a string: `'string'.match(/regex/);`
+  - `.test()` on a regex: `/regex/.test('string');`
+- To find more than the first match, use the global search flag: `g`.
+- Example:
+  ```javascript
+  let testStr = "Repeat, Repeat, Repeat";
+  let repeatRegex = /Repeat/g;
+  testStr.match(repeatRegex); // returns ["Repeat", "Repeat", "Repeat"]
+  ```
+1. **Wildcard Period (.)**
+   - Period (.) acts as a wildcard, matching any one character.
+   - Example: `/hu./` matches "hug," "huh," "hut," and "hum."
+
+2. **Character Classes ([aiu])**
+   - Square brackets define character classes for flexible matching.
+   - Example: `/b[aiu]g/` matches "bag," "big," and "bug," but not "bog."
+
+3. **Range of Characters ([a-e])**
+   - Hyphen (-) in character sets defines a range.
+   - Example: `[a-e]at` matches "cat," "bat," but not "mat."
+
+4. **Combining Letters and Numbers**
+   - Use hyphen (-) for ranges in character sets.
+   - Example: `/[a-z0-9]/ig` matches letters and numbers.
+
+5. **Negated Character Sets ([^aeiou])**
+   - Caret (^) negates character sets.
+   - Example: `/[^aeiou]/gi` matches non-vowel characters.
+
+6. **One or More Times (+)**
+   - Plus (+) matches characters occurring one or more times consecutively.
+   - Example: `/a+/g` matches "a" in "abc" and "aa" in "aabc."
+
+7. **Zero or More Times (*)**
+   - Asterisk (*) matches characters occurring zero or more times.
+   - Example: `/go*` matches "goooooooo" and "g" but not null.
+
+8. **Lazy Matching (?):**
+   - Greedy matching finds the longest match; lazy matching finds the shortest.
+   - Example: `/t[a-z]*i/` in "titanic" is greedy, returning ["titani"], 
+   while `/t[a-z]*?i/` is lazy, returning ["ti"].
+
+^kvk^/ cheks only if kvk in start of sting oposite is /.$/ for at end condition
+ use \w for alphanumeric and underscore but \W for the opposite
+|||ly of digit use d and D
+Matching Whitespace (\s):
+
+Use \s to match whitespace characters like space, carriage return, tab, form feed, and new line.
+Example: let spaceRegex = /\s/g;
+Matching Non-Whitespace (\S):
+
+Use \S to match any character except whitespace.
+Example: let nonSpaceRegex = /\S/g;
+Quantity Specifiers:
+
+Use curly brackets ({ and }) to specify a range of patterns.
+{3,5} matches between 3 and 5 occurrences.
+{3,} matches 3 or more occurrences.
+{3} matches exactly 3 occurrences.
+All or None with ? (Optional Element):
+
+Use ? to specify zero or one of the preceding element, making it optional.
+Positive Lookahead (?=...):
+
+Positive lookahead checks if an element is there without actually matching it.
+Negative Lookahead (?!...):
+
+Negative lookahead checks if an element is not there.
+Example: let qRegex = /q(?!u)/;
+Practical Example - Password Checker:
+
+Naive password checker example: /(?=\w{3,6})(?=\D*\d)/
+Checks for 3 to 6 characters and at least one number.
+Short Notes:
+
+\s matches whitespace characters.
+\S matches non-whitespace characters.
+Use {} for quantity specifiers.
+? makes the preceding element optional.
+Positive lookahead: (?=...)
+Negative lookahead: (?!...)
+Example: Password checker - /(?=\w{3,6})(?=\D*\d)/
