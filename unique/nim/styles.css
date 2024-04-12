@@ -59,12 +59,12 @@ h2{
 }
 
 #OnePlayer{
-    background-color: #FEF2BF;
+    background-color: #000000;
     border-radius: 20%;
         margin: 2px;
 }
 #TwoPlayer {
-    background-color: #FEF2BF;
+    background-color: #000000;
     border-radius: 20%;
         margin: 2px;
 }
@@ -82,4 +82,14 @@ h2{
     border: none;
     border-radius: 15px;
     box-shadow: 0 9px #999;
+}
+.footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 200px;
+    background-color: #f8f9fa;
+    color: black;
+    text-align: center;
+    padding: 10px;
 }
