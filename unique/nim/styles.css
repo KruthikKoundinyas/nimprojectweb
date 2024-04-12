@@ -88,8 +88,16 @@ h2{
     right: 1;
     bottom: 0;
     width: 200px;
-    color: black;
-    font-size: 5vh;
+    color: rgb(0, 0, 180);
+        font-size: 20px;
     text-align: center;
     padding: 10px;
+}
+
+.restart {
+    font-size: 20px;
+}
+
+.next {
+    font-size: 20px;
 }
