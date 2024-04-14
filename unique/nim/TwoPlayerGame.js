@@ -1,4 +1,5 @@
 turn = 1;
+let isRowSelected = false;
 let isFirstClick = true;
 var nextClicked = false;
 var locked = false;
@@ -16,6 +17,7 @@ $(".next").click(function () {
   if (isFirstClick) {
     $(".container").toggleClass("contained");//to fix
     isFirstClick = false;
+isRowSelected = false;
   }
 
   if (turn > 0) {
@@ -32,8 +34,6 @@ $(".next").click(function () {
 
   $(".pressed").hide();
 });
-
-let isRowSelected = false;
 
 $(".row").click(function () {
   if (!isRowSelected) {
