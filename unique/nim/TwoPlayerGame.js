@@ -14,7 +14,7 @@ $(document).ready(function () {
 
 $(".next").click(function () {
   if (isFirstClick) {
-    $(".container").toggleClass("contained");
+    $(".container").toggleClass("contained");//to fix
     isFirstClick = false;
   }
 
