@@ -17,12 +17,19 @@ h2{
     font-size: 1rem;
 }
 
-.container {
+#container {
     display: block;
     width: 50%;
     margin: auto;
 }
 
+.contained {
+    margin: auto;
+}
+
+.container {
+    margin: auto;
+}
 .btn {
     margin: 12.5px;
     display:inline-block;
