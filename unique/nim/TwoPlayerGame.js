@@ -44,7 +44,7 @@ $(".row").click(function () {
       isRowSelected = false;
       $(this).removeClass("selected");
     } else {
-      alert("You can't select multiple rows!");
+      alert("You can't select multiple rows! please deselect the previous action");
     }
   }
 });
