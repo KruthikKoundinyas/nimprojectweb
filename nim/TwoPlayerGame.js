@@ -10,9 +10,7 @@ $(document).ready(function () {
     var audio = new Audio("buttonPressSound.mp3");
     audio.play();
   });
-});
-
-$(".next").click(function () {
+  $(".next").click(function () {
   if (isFirstClick) {
     $(".container").toggleClass("contained");
     isFirstClick = false;
@@ -49,3 +47,6 @@ $(".row").click(function () {
     }
   }
 });
+
+});
+
