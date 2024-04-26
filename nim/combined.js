@@ -68,7 +68,7 @@ $(document).ready(function () {
   function selectAction(state) {
     return Math.random() < epsilon
       ? actions[Math.floor(Math.random() * actions.length)]
-      : actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
+      : makeMove(state);
   }
 
   // Function to update Q-values based on Q-learning algorithm
