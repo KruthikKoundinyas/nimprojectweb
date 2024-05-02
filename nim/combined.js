@@ -1,10 +1,10 @@
-let turn = 1;
-let isFirstClick = true;
-let nextClicked = false;
-let locked = false;
-let Q = {}; // Define the Q variable here
-
 $(document).ready(function () {
+  let turn = 1;
+  let isFirstClick = true;
+  let nextClicked = false;
+  let locked = false;
+  let Q = {}; // Define the Q variable here
+
   $(".container").hide();
   $(".btn").click(function () {
     var selectedButton = $(this);
@@ -15,7 +15,8 @@ $(document).ready(function () {
 
   $(".next").click(function () {
     if (isFirstClick) {
-      $(".container").toggleClass("contained");
+      $("#container").addClass("contained");
+      $("#container").removeClass("contained");
       isFirstClick = false;
     }
 
@@ -25,6 +26,12 @@ $(document).ready(function () {
     if ($(".btn").length == $(".btn.pressed").length) {
       $("#level-title").text("Player " + (turn + 1) + " wins");
       $(this).hide();
+    }
+
+    // Check if it's AI's turn
+    if (turn === 0) {
+      // Perform AI move
+      performAIMove();
     }
 
     $(".pressed").hide();
@@ -43,13 +50,60 @@ $(document).ready(function () {
         $(this).removeClass("selected");
       } else {
         alert("You can't select multiple rows!");
+        $(".btn").addClass(".press");
       }
     }
   });
 
+  function performAIMove() {
+    // Ensure AI selects at least one stone
+    if ($(".row .btn:not(.pressed)").length > 0) {
+      // Select a row using the Q-learning algorithm
+      let selectedRow = selectRow();
+
+      // Determine the number of stones to remove
+      let stonesToRemove = makeMove(selectedRow);
+      stonesToRemove = Math.max(1, stonesToRemove); // Force at least one stone to be removed
+
+      // Add 'pressed' class to the specified number of buttons in the selected row
+      $(
+        `.row:nth-child(${
+          selectedRow + 1
+        }) .btn:not(.pressed):lt(${stonesToRemove})`
+      ).addClass("pressed");
+
+      // Hide the pressed buttons after a short delay
+      setTimeout(function () {
+        $(".pressed").hide();
+        updateStonesCount(selectedRow, stonesToRemove);
+      }, 1000); // You can adjust the delay as needed
+    } else {
+      // If no stones are available to be removed, handle end of game scenario
+      console.log("No more stones to remove, game over.");
+      // Implement game over logic here
+    }
+  }
+
+  function updateStonesCount(selectedRow) {
+    const stonesToRemove = $(
+      ".row:nth-child(" + (selectedRow + 1) + ") .pressed"
+    ).length;
+    console.log("Stones removed: " + stonesToRemove);
+  }
+
+  // Function to select a row using Q-learning algorithm
+  function selectRow() {
+    // Choose a row based on learned Q-values
+    let nextState = 0; // Assuming initial state is always 0 for simplicity
+    let selectedRow = makeMove(nextState);
+    return selectedRow;
+  }
+
   // Load Q-values from JSON file
   $.getJSON("q_values.json", function (data) {
     Q = data;
+  }).fail(function () {
+    console.log("Error: JSON file not found or not accessible.");
   });
 
   // Define Q-learning parameters
@@ -68,7 +122,7 @@ $(document).ready(function () {
   function selectAction(state) {
     return Math.random() < epsilon
       ? actions[Math.floor(Math.random() * actions.length)]
-      : makeMove(state);
+      : actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
   }
 
   // Function to update Q-values based on Q-learning algorithm
@@ -97,6 +151,40 @@ $(document).ready(function () {
       epsilon = Math.max(minEpsilon, epsilon * epsilonDecayRate); // Decay epsilon
     }
   }
+
+  // Function to make a move based on learned Q-values
+  function makeMove(state) {
+    return actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
+  }
+  
+  $(".restart").click(function () {
+    $(".row").removeClass("selected").addClass("select");
+    $(".next").show();
+    $("#level-title").text("Press next button to Start");
+
+    // Reset game state
+    turn = 1;
+    isFirstClick = true;
+    nextClicked = false;
+    locked = false;
+    Q = {};//reset Q values(if needed)
+   /*
+    // Reset UI
+    $(".btn").removeClass("pressed");
+    $(".btn").addClass("press");
+    $(".row").removeClass("selected");
+    $(".row").addClass("select");
+    $(".next").show();
+    $("#level-title").text("Press next button to Start");
+
+    // Reset game state
+    turn = 1;
+    isFirstClick = true;
+    nextClicked = false;
+    locked = false;
+    //Q = {}//reset Q values(if needed)
+  });*/
+});
 
   // Function to make a move based on learned Q-values
   function makeMove(state) {
