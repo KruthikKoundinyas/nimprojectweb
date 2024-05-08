@@ -163,32 +163,20 @@ $(document).ready(function () {
     return actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
   }
 
+  //restart the setup while remembering previous game
   $(".restart").click(function () {
+    $(".btn").removeClass("pressed").addClass("press");
     $(".row").removeClass("selected").addClass("select");
+
+    // Reload Q-values from JSON file
+    $.getJSON("q_values.json", function (data) {
+      Q = data;
+    }).fail(function () {
+      console.log("Error: JSON file not found or not accessible.");
+    });
     $(".next").show();
     $("#level-title").text("Press next button to Start");
-
-    // Reset game state
-    turn = 1;
+    $("#container").removeClass("contained").addClass("contained");
     isFirstClick = true;
-    nextClicked = false;
-    locked = false;
-    Q = {}; //reset Q values(if needed)
-    /*
-     // Reset UI
-     $(".btn").removeClass("pressed");
-     $(".btn").addClass("press");
-     $(".row").removeClass("selected");
-     $(".row").addClass("select");
-     $(".next").show();
-     $("#level-title").text("Press next button to Start");
- 
-     // Reset game state
-     turn = 1;
-     isFirstClick = true;
-     nextClicked = false;
-     locked = false;
-     //Q = {}//reset Q values(if needed)
-   });*/
   });
 });
