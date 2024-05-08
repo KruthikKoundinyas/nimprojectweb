@@ -87,7 +87,7 @@ $(document).ready(function () {
     setTimeout(function () {
       $(".pressed").hide();
       updateStonesCount(selectedRow, stonesToRemove);
-    }, 10000); // You can adjust the delay as needed
+    }, 5000); // You can adjust the delay as needed
   }
 
   function updateStonesCount(selectedRow) {
