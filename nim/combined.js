@@ -29,7 +29,7 @@ $(document).ready(function () {
     }
 
     // Check if it's AI's turn
-    if (turn === 0) {
+    if (turn === 1) {
       // Perform AI move
       $("#level-title").text("AI's Turn");
       performAIMove();
@@ -57,32 +57,37 @@ $(document).ready(function () {
   });
 
   function performAIMove() {
-    // Ensure AI selects at least one stone
-    if ($(".row .btn:not(.pressed)").length > 0) {
-      // Select a row using the Q-learning algorithm
-      let selectedRow = selectRow();
+    let selectedRow = -1;
 
-      // Determine the number of stones to remove
-      let stonesToRemove = makeMove(selectedRow);
-      stonesToRemove = Math.max(1, stonesToRemove); // Force at least one stone to be removed
-
-      // Add 'pressed' class to the specified number of buttons in the selected row
-      $(
-        `.row:nth-child(${
-          selectedRow + 1
-        }) .btn:not(.pressed):lt(${stonesToRemove})`
-      ).addClass("pressed");
-
-      // Hide the pressed buttons after a short delay
-      setTimeout(function () {
-        $(".pressed").hide();
-        updateStonesCount(selectedRow, stonesToRemove);
-      }, 1000); // You can adjust the delay as needed
-    } else {
-      // If no stones are available to be removed, handle end of game scenario
-      console.log("No more stones to remove, game over.");
-      // Implement game over logic here
+    // Keep selecting a row until at least one stone can be removed
+    while (selectedRow === -1) {
+      const rows = $(".row");
+      rows.each(function (index) {
+        if ($(this).find(".btn:not(.pressed)").length > 0) {
+          selectedRow = index;
+          return false; // Break out of the loop once a valid row is found
+        }
+      });
     }
+
+    // Select a row using the Q-learning algorithm
+    let stonesToRemove = 0;
+    while (stonesToRemove === 0) {
+      stonesToRemove = makeMove(selectedRow);
+    }
+
+    // Add 'pressed' class to the specified number of buttons in the selected row
+    $(
+      `.row:nth-child(${
+        selectedRow + 1
+      }) .btn:not(.pressed):lt(${stonesToRemove})`
+    ).addClass("pressed");
+
+    // Hide the pressed buttons after a short delay
+    setTimeout(function () {
+      $(".pressed").hide();
+      updateStonesCount(selectedRow, stonesToRemove);
+    }, 10000); // You can adjust the delay as needed
   }
 
   function updateStonesCount(selectedRow) {
@@ -157,7 +162,7 @@ $(document).ready(function () {
   function makeMove(state) {
     return actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
   }
-  
+
   $(".restart").click(function () {
     $(".row").removeClass("selected").addClass("select");
     $(".next").show();
@@ -168,27 +173,22 @@ $(document).ready(function () {
     isFirstClick = true;
     nextClicked = false;
     locked = false;
-    Q = {};//reset Q values(if needed)
-   /*
-    // Reset UI
-    $(".btn").removeClass("pressed");
-    $(".btn").addClass("press");
-    $(".row").removeClass("selected");
-    $(".row").addClass("select");
-    $(".next").show();
-    $("#level-title").text("Press next button to Start");
-
-    // Reset game state
-    turn = 1;
-    isFirstClick = true;
-    nextClicked = false;
-    locked = false;
-    //Q = {}//reset Q values(if needed)
-  });*/
-});
-
-  // Function to make a move based on learned Q-values
-  function makeMove(state) {
-    return actions.reduce((a, b) => (Q[state][a] > Q[state][b] ? a : b));
-  }
+    Q = {}; //reset Q values(if needed)
+    /*
+     // Reset UI
+     $(".btn").removeClass("pressed");
+     $(".btn").addClass("press");
+     $(".row").removeClass("selected");
+     $(".row").addClass("select");
+     $(".next").show();
+     $("#level-title").text("Press next button to Start");
+ 
+     // Reset game state
+     turn = 1;
+     isFirstClick = true;
+     nextClicked = false;
+     locked = false;
+     //Q = {}//reset Q values(if needed)
+   });*/
+  });
 });
