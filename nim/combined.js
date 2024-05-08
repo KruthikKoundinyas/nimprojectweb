@@ -31,6 +31,7 @@ $(document).ready(function () {
     // Check if it's AI's turn
     if (turn === 0) {
       // Perform AI move
+      $("#level-title").text("AI's Turn");
       performAIMove();
     }
 
