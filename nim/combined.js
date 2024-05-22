@@ -120,9 +120,9 @@ $(document).ready(function () {
   const minEpsilon = 0.1;
   const epsilonDecayRate = 0.99;
 
-  // Define the state-action space
-  const states = [0, 1, 2, 3, 4]; // Possible states representing the number of stones in each pile
-  const actions = [1, 2, 3]; // Possible actions representing the number of stones to remove
+    // Define the state-action space
+  const states = [1, 3, 5]; // Possible states representing the number of stones in each pile
+  const actions = [1, 2, 3, 4]; // Possible actions representing the number of stones to remove
 
   // Function to select an action based on epsilon-greedy strategy
   function selectAction(state) {
