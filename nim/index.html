@@ -1,38 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      sizes="32x32"
-      type="image/png"
-      href="https://en.pimg.jp/087/557/255/1/87557255.jpg"
-    />
-    <title>NIM The Game</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Press+Start+2P"
-      rel="stylesheet"
-    />
+    <meta name="description" content="Play the classic NIM game with beautiful retro aesthetics" />
+    <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
+    <title>NIM Game</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
   </head>
   <body>
-    <div>
-      <h1>NIM GAME</h1>
-      <h2>HOW To Play</h2>
-      <ul id="howto" class="container">
-        <li>select a line</li>
-        <li>select number of pawns to remove from the selected line</li>
-        <li>last to remove pawn losses</li>
-      </ul>
-    </div>
-    <div id="gameSheetLink" class="container2">
-      <a href="./OnePlayer.html">
-        <div type="button" id="OnePlayer" class="button">1 Player</div>
-      </a>
-      <a href="./twoPlayer.html">
-        <div type="button" id="TwoPlayer" class="button">2 Player</div>
+    <header>
+      <button class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <h1 id="level-title">NIM Game</h1>
+    </header>
+    
+    <main>
+      <div class="game-container">
+        <div class="game-intro">
+          <p>Welcome to the classic game of NIM with a retro twist!</p>
+        </div>
+        
+        <div class="game-instructions">
+          <h2>How to Play</h2>
+          <ul id="howto">
+            <li>Players take turns removing objects from rows</li>
+            <li>You can remove any number of objects from a single row on your turn</li>
+            <li>The player who takes the last object <strong>loses</strong> the game</li>
+            <li>Use strategy to force your opponent to take the last object</li>
+          </ul>
+        </div>
+        
+        <div class="game-modes">
+          <a href="one-player.html" class="game-button">
+            <button id="OnePlayer">One Player</button>
+          </a>
+          <a href="two-player.html" class="game-button">
+            <button id="TwoPlayer">Two Players</button>
+          </a>
+        </div>
+        <br>
+        <div class="features">
+          <h2>Game Features</h2>
+          <div class="feature-grid">
+            <div class="feature-item">
+              <h3>Smart AI</h3>
+              <p>Challenge yourself against an AI opponent with multiple difficulty levels</p>
+            </div>
+            <br>
+            <div class="feature-item">
+              <h3>Learning AI</h3>
+              <p>Play against an AI that learns from your moves and gets better over time</p>
+            </div>
+            <br>
+            <div class="feature-item">
+              <h3>Two Player Mode</h3>
+              <p>Challenge a friend in the classic two-player version of NIM</p>
+            </div>
+            <br>
+            <div class="feature-item">
+              <h3>Track Progress</h3>
+              <p>Keep track of your wins, losses and win streaks</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="footer">
+        <p>Created by Koundinya</p>
+        <a href="https://github.com/KruthikKoundinyas/nimprojectweb" aria-label="GitHub Repository">
+          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
         </a>
-    </div>
+      </div>
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      // Simple theme toggler
+      $(document).ready(function() {
+        $('.theme-toggle').on('click', function() {
+          $('body').toggleClass('dark-mode');
+          
+          // Update toggle icon
+          if ($('body').hasClass('dark-mode')) {
+            $(this).text('☀️');
+            localStorage.setItem('nim-theme', 'dark');
+          } else {
+            $(this).text('🌙');
+            localStorage.setItem('nim-theme', 'light');
+          }
+        });
+        
+        // Load saved theme preference
+        if (localStorage.getItem('nim-theme') === 'dark') {
+          $('body').addClass('dark-mode');
+          $('.theme-toggle').text('☀️');
+        }
+      });
+    </script>
   </body>
 </html>

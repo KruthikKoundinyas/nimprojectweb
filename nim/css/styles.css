@@ -1,0 +1,568 @@
+/* Base styles and reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #011F3F;
+    color: #FEFEEF;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Typography */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    color: #FEF2BF;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #4c90af, 0 0 10px #4c90af;
+    }
+
+    to {
+        text-shadow: 0 0 10px #7cc6e9, 0 0 20px #7cc6e9;
+    }
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin: 30px 0 20px;
+    color: #4c90af;
+}
+
+/* Game Instructions */
+.game-instructions {
+    margin: 40px auto;
+    max-width: 600px;
+}
+
+#howto {
+    text-align: left;
+    font-size: 0.9rem;
+    list-style-type: square;
+    padding-left: 30px;
+    margin: 20px auto;
+    background-color: rgba(76, 144, 175, 0.1);
+    padding: 20px 20px 20px 50px;
+    border-radius: 10px;
+    border-left: 4px solid #4c90af;
+}
+
+#howto li {
+    margin-bottom: 15px;
+}
+
+/* Game Mode Buttons - IMPROVED PILL SHAPE */
+.game-modes {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+
+.game-button {
+    text-decoration: none;
+    width: 200px;
+    display: block;
+    /* Ensures the link takes the full width/height of the button */
+}
+
+/* Updated button styles to be more pill-shaped */
+#OnePlayer,
+#TwoPlayer {
+    padding: 15px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    background-color: #4c90af;
+    border: none;
+    border-radius: 30px;
+    /* Reduced from 50px for more rectangular pill shape */
+    box-shadow: 0 6px #235570, 0 9px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    width: 100%;
+    /* Make the button take the full width of its container */
+    display: inline-block;
+    min-width: 180px;
+    /* Minimum width for buttons */
+}
+
+#OnePlayer:hover,
+#TwoPlayer:hover {
+    background-color: #5da7c8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px #235570, 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+#OnePlayer:active,
+#TwoPlayer:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px #235570;
+}
+
+/* Improved common button styles */
+.restart,
+.next,
+.button {
+    font-family: 'Press Start 2P', cursive;
+    padding: 10px 25px;
+    /* Increased horizontal padding for more rectangular shape */
+    background-color: #4c90af;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    /* Reduced from 50px for more rectangular pill shape */
+    box-shadow: 0 4px #235570;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+    min-width: 120px;
+    /* Minimum width for buttons */
+}
+
+.restart:hover,
+.next:hover,
+.button:hover {
+    background-color: #5da7c8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px #235570;
+}
+
+.restart:active,
+.next:active,
+.button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px #235570;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    #howto {
+        font-size: 0.8rem;
+    }
+
+    .game-modes {
+        gap: 15px;
+    }
+
+    .game-button {
+        width: 160px;
+    }
+
+    #OnePlayer,
+    #TwoPlayer,
+    .restart,
+    .next,
+    .button {
+        min-width: 140px;
+        padding: 12px 20px;
+    }
+}
+
+.selected {
+    background-color: #7cc6e9;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+}
+
+.controls {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    /* Added to improve responsive layout */
+}
+
+#returnButton {
+    margin: 10px;
+    font-size: 0.8rem;
+    display: inline-block;
+}
+
+#game-board {
+    margin: 30px auto;
+    padding: 20px;
+    background-color: rgba(76, 144, 175, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.row {
+    margin: 15px 0;
+    padding: 10px;
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    background-color: #FEF2BF;
+    border: 3px solid #333;
+    border-radius: 50%;
+    /* Keep game pieces circular */
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(124, 198, 233, 0.7);
+}
+
+/* Visual feedback for selected buttons */
+.btn.selected {
+    background-color: #FF5E5B;
+    border-color: #FF5E5B;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        box-shadow: 0 0 5px #FF5E5B;
+    }
+
+    to {
+        box-shadow: 0 0 15px #FF5E5B, 0 0 30px #FF5E5B;
+    }
+}
+
+/* Improved difficulty buttons */
+.difficulty {
+    margin: 25px auto 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.difficulty button {
+    font-family: 'Press Start 2P', cursive;
+    padding: 8px 20px;
+    /* Increased horizontal padding */
+    background-color: #4c90af;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    /* More rectangular pill shape */
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.7;
+    min-width: 100px;
+    /* Minimum width for buttons */
+}
+
+.difficulty button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.difficulty button.active {
+    background-color: #5da7c8;
+    box-shadow: 0 0 10px rgba(124, 198, 233, 0.7);
+    opacity: 1;
+}
+
+/* Turn indicator */
+.turn-indicator {
+    margin: 20px auto;
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: rgba(76, 144, 175, 0.1);
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.turn-indicator.player {
+    color: #7cc6e9;
+}
+
+.turn-indicator.ai {
+    color: #FF5E5B;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    padding: 20px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer svg {
+    fill: #4c90af;
+    transition: fill 0.3s;
+}
+
+.footer svg:hover {
+    fill: #7cc6e9;
+}
+
+/* Disable interaction when element is disabled */
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* AI Thinking Animation */
+.ai-thinking {
+    font-size: 2rem;
+    margin: 15px 0;
+    height: 40px;
+    display: none;
+}
+
+.ai-thinking span {
+    display: inline-block;
+    opacity: 0.3;
+    animation: pulse 0.8s infinite alternate;
+    margin: 0 5px;
+}
+
+.ai-thinking span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ai-thinking span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.ai-thinking span.active {
+    opacity: 1;
+}
+
+/* AI Message */
+.ai-message {
+    font-size: 1rem;
+    margin: 15px 0;
+    padding: 10px 20px;
+    background-color: rgba(76, 144, 175, 0.2);
+    border-radius: 20px;
+    display: inline-block;
+    min-width: 200px;
+    max-width: 80%;
+    text-align: left;
+    position: relative;
+    color: #7cc6e9;
+    border-top-left-radius: 0;
+    display: none;
+}
+
+.ai-message:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(76, 144, 175, 0.2);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+/* Game Message */
+#game-message {
+    padding: 10px 20px;
+    margin: 15px auto;
+    border-radius: 8px;
+    display: none;
+    max-width: 80%;
+}
+
+#game-message.error {
+    background-color: rgba(255, 94, 91, 0.2);
+    color: #FF5E5B;
+}
+
+#game-message.info {
+    background-color: rgba(76, 144, 175, 0.2);
+    color: #7cc6e9;
+}
+
+#game-message.success {
+    background-color: rgba(113, 239, 176, 0.2);
+    color: #71EFB0;
+}
+
+/* Stats Panel */
+.stats-panel {
+    margin: 30px auto;
+    padding: 15px;
+    background-color: rgba(76, 144, 175, 0.1);
+    border-radius: 10px;
+    max-width: 400px;
+}
+
+.stats-panel h3 {
+    margin-bottom: 15px;
+    color: #7cc6e9;
+}
+
+.stats-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.stat-item {
+    padding: 8px;
+    background-color: rgba(76, 144, 175, 0.1);
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.stat-label {
+    color: #7cc6e9;
+    margin-right: 5px;
+}
+
+/* Sound Toggle Button */
+#sound-toggle {
+    margin: 20px auto;
+    font-size: 0.7rem;
+    padding: 8px 15px;
+}
+
+/* Game Container */
+.game-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Game Rules */
+.game-rules {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgba(76, 144, 175, 0.1);
+    border-radius: 10px;
+}
+
+/* Button Animations */
+@keyframes buttonWin {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        background-color: #71EFB0;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes buttonLose {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        background-color: #FF5E5B;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.win-animation {
+    animation: buttonWin 1s ease-in-out;
+}
+
+.lose-animation {
+    animation: buttonLose 1s ease-in-out;
+}
+
+/* Dark Mode Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #FEF2BF;
+    transition: all 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode h1 {
+    color: #7cc6e9;
+}
+
+body.dark-mode .btn {
+    background-color: #333;
+    border-color: #555;
+}
+
+body.dark-mode #game-board {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .button,
+body.dark-mode .restart,
+body.dark-mode .next {
+    background-color: #444;
+    box-shadow: 0 4px #222;
+}
+
+body.dark-mode .difficulty button {
+    background-color: #444;
+}
+
+body.dark-mode .difficulty button.active {
+    background-color: #666;
+}
