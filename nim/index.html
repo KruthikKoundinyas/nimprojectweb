@@ -8,6 +8,10 @@
     <title>NIM Game</title>
     <link rel="stylesheet" href="./css/styles.css" />
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <header>
@@ -21,6 +25,32 @@
           <p>Welcome to the classic game of NIM with a retro twist!</p>
         </div>
         
+
+        // Game concept explination
+        <div class="popup-container game-instructions">
+          <button class="popup-button" onclick="togglePopup()">What is the Nim Game? Learn More.</button>
+          <div id="popupText" class="popup-content">
+🧠 The Nim Game – A Puzzle of Sticks and Strategy
+      Imagine a game where there are a few piles of sticks. Two players take turns. On each turn, a player picks one pile and removes as many sticks as they want (but only from that one pile). The goal? Be the one to take the last stick.
+
+Sounds simple? It is—until you learn there's a hidden math trick that can tell you whether you're going to win or lose from any position.
+
+🔍 What’s the Trick?
+      There’s a secret calculation (called the “nim sum”) that uses something called XOR (a kind of digital addition). If the nim sum is zero, you're in a losing spot. If it’s not zero, you’re in a winning one—if you play smart.
+
+By understanding this trick, you can always find a way to force a win (or avoid a loss) depending on the situation.
+
+🔄 The Misère Twist – When Winning Means Losing
+      Now flip the rules: in a Misère Nim game, the player who removes the last stick loses.
+
+How do you win here? You start by playing exactly like the normal Nim game—until the end. Then, you switch strategies at just the right moment. The trick is knowing when to change tactics, which makes the game a bit of a brain teaser, even for experienced players.
+
+🧩 Why Should You Care?
+      These games are more than just fun—they’re used in AI, computer science, and game theory. They teach us how to think ahead, recognize patterns, and make decisions in uncertain situations.
+
+Whether you're into puzzles or programming, Nim is a simple game that hides some deep mathematical beauty. Give it a try—and see if you can crack the code!
+          </div>
+        </div>
         <div class="game-instructions">
           <h2>How to Play</h2>
           <ul id="howto">
@@ -80,6 +110,10 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+      function togglePopup() {
+        var content = document.getElementById("popupText");
+        content.style.display = (content.style.display === "block") ? "none" : "block";
+      }
       // Simple theme toggler
       $(document).ready(function() {
         $('.theme-toggle').on('click', function() {

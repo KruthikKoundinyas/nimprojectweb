@@ -71,6 +71,58 @@ h2 {
     margin-bottom: 15px;
 }
 
+/* Popup Styles */
+.popup-container {
+    margin: 40px auto;
+    max-width: 700px;
+    text-align: left;
+    background-color: rgba(76, 144, 175, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #4c90af;
+}
+
+.popup-button {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #4c90af;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    box-shadow: 0 4px #235570;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+}
+
+.popup-button:hover {
+    background-color: #5da7c8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px #235570;
+}
+
+.popup-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px #235570;
+}
+
+.popup-content {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(0, 31, 63, 0.85);
+    color: #FEFEEF;
+    border-radius: 10px;
+    border: 1px solid #4c90af;
+    font-size: 0.75rem;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(124, 198, 233, 0.3);
+}
 /* Game Mode Buttons - IMPROVED PILL SHAPE */
 .game-modes {
     display: flex;
