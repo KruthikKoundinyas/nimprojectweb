@@ -1,0 +1,40 @@
+# NimLab — Game Theory & Reinforcement Learning Playground
+
+## Summary
+NimLab is an interactive educational web application that demonstrates how two fundamentally different approaches — mathematical optimization (XOR/Nim Sum strategy) and reinforcement learning (Q-Learning) — solve the same strategic decision-making problem: the Misère variant of the Nim game.
+
+## Purpose
+This project explores the boundary between algorithmic intelligence and learned intelligence. The XOR strategy computes the optimal move analytically, while Q-Learning discovers the same policy through experience. The comparison reveals when analytical solutions outperform learning, and when learning is the only option.
+
+## Features
+- Play against 4 AI strategies: Random, Greedy, Optimal (XOR), Q-Learning
+- Explainable AI: Algorithm Inspector shows Nim Sum, binary representations, optimal moves, and reasoning
+- Learning Mode: Interactive tutorials on XOR, Nim Sum, winning/losing positions, Misère endgame
+- Algorithm Comparison: Simulate AI vs AI matches (up to 5000 games) and compare win rates
+- Custom board configurations
+- Move history and statistics tracking
+- Two-player mode
+
+## Technical Implementation
+- Q-Learning with epsilon-greedy exploration, trained against a mixed-strategy opponent
+- Correct Misère Nim strategy with endgame switching
+- Pure JavaScript, jQuery, HTML/CSS — no build tools required
+- localStorage for Q-values, statistics, and preferences
+
+## Key Concepts Demonstrated
+- Reinforcement Learning (Q-Learning, temporal difference, exploration vs exploitation)
+- Combinatorial Game Theory (Nim Sum, Sprague-Grundy theorem foundations)
+- Algorithm Design & Comparison
+- Explainable AI / Transparent Decision-Making
+
+## Author
+Kruthik Koundinyas
+GitHub: https://github.com/KruthikKoundinyas
+Portfolio: https://kruthik.vercel.app
+
+## Pages
+- / (index.html) — Landing page with project overview
+- /one-player.html — Play vs AI with Algorithm Inspector
+- /learn.html — Interactive game theory and RL tutorials
+- /compare.html — AI vs AI simulation and performance comparison
+- /two-player.html — Two-player mode

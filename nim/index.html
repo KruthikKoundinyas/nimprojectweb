@@ -3,40 +3,113 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Play the classic NIM game with beautiful retro aesthetics" />
-    <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
-    <title>NIM Game</title>
+    <meta name="description" content="NimLab — An interactive Game Theory & Reinforcement Learning playground. Play against 4 AI strategies, learn XOR/Nim Sum strategy, and compare algorithmic vs learned intelligence." />
+    <meta name="keywords" content="nim game, game theory, reinforcement learning, q-learning, XOR strategy, nim sum, AI playground, combinatorial game theory, misere nim, interactive education" />
+    <meta name="author" content="Kruthik Koundinyas" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#011F3F" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="NimLab — Game Theory & Reinforcement Learning Playground" />
+    <meta property="og:description" content="Explore how mathematical optimization (XOR) and reinforcement learning (Q-Learning) solve the same strategic decision-making problem. Play, learn, and compare AI strategies." />
+    <meta property="og:image" content="./assets/images/og-image.svg" />
+    <meta property="og:url" content="https://nimprojectweb.vercel.app/nim/" />
+    <meta property="og:site_name" content="NimLab" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NimLab — Game Theory & RL Playground" />
+    <meta name="twitter:description" content="Play against 4 AI strategies, learn Nim Sum/XOR strategy, and compare algorithmic vs learned intelligence in this interactive educational platform." />
+    <meta name="twitter:image" content="./assets/images/og-image.svg" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="apple-touch-icon" href="./assets/images/og-image.svg" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+
+    <title>NimLab — Game Theory & RL Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="./css/styles.css" />
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "NimLab",
+      "alternateName": "Game Theory & Reinforcement Learning Playground",
+      "description": "An interactive educational platform demonstrating how mathematical optimization (XOR strategy) and reinforcement learning (Q-Learning) solve the Misère Nim game. Features 4 AI difficulty levels, explainable AI, interactive tutorials, and algorithm comparison.",
+      "url": "https://nimprojectweb.vercel.app/nim/",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "author": {
+        "@type": "Person",
+        "name": "Kruthik Koundinyas",
+        "url": "https://github.com/KruthikKoundinyas"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "keywords": ["game theory", "reinforcement learning", "Q-learning", "XOR", "nim sum", "AI education", "combinatorial game theory"],
+      "educationalLevel": "Intermediate",
+      "learningResourceType": "Interactive simulation"
+    }
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
-    <header>
-      <button class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
-      <h1 id="level-title">NIM Game</h1>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <header role="banner">
+      <button type="button" class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <h1 id="level-title">NimLab</h1>
+      <p class="subtitle">Game Theory & Reinforcement Learning Playground</p>
     </header>
-    
-    <main>
-      <div class="game-container">
-        <div class="game-intro">
-          <p>Welcome to the classic game of NIM with a retro twist!</p>
-        </div>
-        
 
-        // Game concept explination
+    <nav class="main-nav">
+      <a href="one-player.html" class="nav-card">
+        <span class="nav-icon">🤖</span>
+        <span class="nav-label">Play vs AI</span>
+        <span class="nav-desc">Challenge 4 AI strategies</span>
+      </a>
+      <a href="two-player.html" class="nav-card">
+        <span class="nav-icon">👥</span>
+        <span class="nav-label">Two Players</span>
+        <span class="nav-desc">Play against a friend</span>
+      </a>
+      <a href="learn.html" class="nav-card">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Learn</span>
+        <span class="nav-desc">Nim Sum, XOR & strategy</span>
+      </a>
+      <a href="compare.html" class="nav-card">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Compare</span>
+        <span class="nav-desc">AI vs AI simulations</span>
+      </a>
+    </nav>
+
+    <main id="main-content" role="main">
+      <div class="game-container">
         <div class="popup-container game-instructions">
-          <button class="popup-button" onclick="togglePopup()">What is the Nim Game? Learn More.</button>
+          <button type="button" class="popup-button" onclick="togglePopup()">What is the Nim Game? Learn More.</button>
           <div id="popupText" class="popup-content">
 🧠 The Nim Game – A Puzzle of Sticks and Strategy
       Imagine a game where there are a few piles of sticks. Two players take turns. On each turn, a player picks one pile and removes as many sticks as they want (but only from that one pile). The goal? Be the one to take the last stick.
 
 Sounds simple? It is—until you learn there's a hidden math trick that can tell you whether you're going to win or lose from any position.
 
-🔍 What’s the Trick?
-      There’s a secret calculation (called the “nim sum”) that uses something called XOR (a kind of digital addition). If the nim sum is zero, you're in a losing spot. If it’s not zero, you’re in a winning one—if you play smart.
+🔍 What's the Trick?
+      There's a secret calculation (called the "nim sum") that uses something called XOR (a kind of digital addition). If the nim sum is zero, you're in a losing spot. If it's not zero, you're in a winning one—if you play smart.
 
 By understanding this trick, you can always find a way to force a win (or avoid a loss) depending on the situation.
 
@@ -46,13 +119,14 @@ By understanding this trick, you can always find a way to force a win (or avoid 
 How do you win here? You start by playing exactly like the normal Nim game—until the end. Then, you switch strategies at just the right moment. The trick is knowing when to change tactics, which makes the game a bit of a brain teaser, even for experienced players.
 
 🧩 Why Should You Care?
-      These games are more than just fun—they’re used in AI, computer science, and game theory. They teach us how to think ahead, recognize patterns, and make decisions in uncertain situations.
+      These games are more than just fun—they're used in AI, computer science, and game theory. They teach us how to think ahead, recognize patterns, and make decisions in uncertain situations.
 
 Whether you're into puzzles or programming, Nim is a simple game that hides some deep mathematical beauty. Give it a try—and see if you can crack the code!
           </div>
         </div>
+
         <div class="game-instructions">
-          <h2>How to Play</h2>
+          <h2>How to Play (Misère Rules)</h2>
           <ul id="howto">
             <li>Players take turns removing objects from rows</li>
             <li>You can remove any number of objects from a single row on your turn</li>
@@ -60,77 +134,62 @@ Whether you're into puzzles or programming, Nim is a simple game that hides some
             <li>Use strategy to force your opponent to take the last object</li>
           </ul>
         </div>
-        
-        <div class="game-modes">
-          <a href="one-player.html" class="game-button">
-            <button id="OnePlayer">One Player</button>
-          </a>
-          <a href="two-player.html" class="game-button">
-            <button id="TwoPlayer">Two Players</button>
-          </a>
-        </div>
-        <br>
+
         <div class="features">
-          <h2>Game Features</h2>
+          <h2>What Makes NimLab Different</h2>
           <div class="feature-grid">
             <div class="feature-item">
-              <h3>Smart AI</h3>
-              <p>Challenge yourself against an AI opponent with multiple difficulty levels</p>
+              <h3>Explainable AI</h3>
+              <p>See why the AI makes each move — Nim Sum, optimal strategy, and confidence levels</p>
             </div>
-            <br>
             <div class="feature-item">
-              <h3>Learning AI</h3>
-              <p>Play against an AI that learns from your moves and gets better over time</p>
+              <h3>4 AI Strategies</h3>
+              <p>Random, Greedy, Optimal (XOR), and Q-Learning — compare analytical vs learned intelligence</p>
             </div>
-            <br>
             <div class="feature-item">
-              <h3>Two Player Mode</h3>
-              <p>Challenge a friend in the classic two-player version of NIM</p>
+              <h3>Learning Mode</h3>
+              <p>Interactive tutorials on XOR, Nim Sum, winning positions, and the Misère endgame</p>
             </div>
-            <br>
             <div class="feature-item">
-              <h3>Track Progress</h3>
-              <p>Keep track of your wins, losses and win streaks</p>
+              <h3>Algorithm Comparison</h3>
+              <p>Run AI vs AI simulations and see win rates across strategies</p>
             </div>
           </div>
         </div>
       </div>
     </main>
-    
+
     <footer>
       <div class="footer">
-        <p>Created by Koundinya</p>
+        <p>NimLab — Exploring Game Theory & Reinforcement Learning</p>
         <a href="https://github.com/KruthikKoundinyas/nimprojectweb" aria-label="GitHub Repository">
-          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" class="octicon octicon-mark-github v-align-middle color-fg-default">
             <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
           </svg>
         </a>
       </div>
     </footer>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       function togglePopup() {
         var content = document.getElementById("popupText");
         content.style.display = (content.style.display === "block") ? "none" : "block";
       }
-      // Simple theme toggler
+
       $(document).ready(function() {
         $('.theme-toggle').on('click', function() {
           $('body').toggleClass('dark-mode');
-          
-          // Update toggle icon
           if ($('body').hasClass('dark-mode')) {
             $(this).text('☀️');
-            localStorage.setItem('nim-theme', 'dark');
+            localStorage.setItem('nimlab-theme', 'dark');
           } else {
             $(this).text('🌙');
-            localStorage.setItem('nim-theme', 'light');
+            localStorage.setItem('nimlab-theme', 'light');
           }
         });
-        
-        // Load saved theme preference
-        if (localStorage.getItem('nim-theme') === 'dark') {
+
+        if (localStorage.getItem('nimlab-theme') === 'dark') {
           $('body').addClass('dark-mode');
           $('.theme-toggle').text('☀️');
         }

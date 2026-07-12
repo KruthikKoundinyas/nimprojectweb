@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Learn Nim strategy — interactive tutorials on XOR, Nim Sum, winning/losing positions, Misère endgame, and how Q-Learning discovers optimal play without being told the rules." />
+    <meta name="keywords" content="nim sum tutorial, XOR strategy explained, game theory tutorial, q-learning explained, misere nim strategy, reinforcement learning education" />
+    <meta name="author" content="Kruthik Koundinyas" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#011F3F" />
+    <meta property="og:title" content="NimLab — Learn Game Theory & Q-Learning" />
+    <meta property="og:description" content="Interactive tutorials: XOR calculator, Nim Sum strategy, Misère endgame, and how reinforcement learning discovers optimal play." />
+    <meta property="og:image" content="./assets/images/og-image.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="NimLab — Learn Game Theory" />
+    <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/learn.html" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="manifest" href="./manifest.json" />
+    <title>NimLab — Learn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <a href="./index.html">
+        <div type="button" id="returnButton" class="button">← Main Menu</div>
+      </a>
+      <button type="button" class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <h1>Learn Nim</h1>
+      <p class="subtitle">Understanding the mathematics behind strategic decision-making</p>
+    </header>
+
+    <main>
+      <div class="learn-container">
+        <div class="learn-tabs">
+          <button type="button" class="learn-tab active" data-tab="basics">Basics</button>
+          <button type="button" class="learn-tab" data-tab="nimsum">Nim Sum</button>
+          <button type="button" class="learn-tab" data-tab="strategy">Strategy</button>
+          <button type="button" class="learn-tab" data-tab="misere">Misere</button>
+          <button type="button" class="learn-tab" data-tab="qlearning">Q-Learning</button>
+        </div>
+
+        <div class="learn-content" id="learn-content">
+          <!-- BASICS -->
+          <div class="learn-panel active" data-panel="basics">
+            <h2>The Game of Nim</h2>
+            <p>Nim is a two-player mathematical strategy game. Players take turns removing objects from distinct heaps. On each turn, a player must remove <strong>at least one object</strong> from a <strong>single heap</strong>.</p>
+
+            <div class="learn-example">
+              <h4>Example Board</h4>
+              <div class="example-board">
+                <div class="example-heap"><span>Heap 1:</span> <span class="stones">&bull;</span></div>
+                <div class="example-heap"><span>Heap 2:</span> <span class="stones">&bull; &bull; &bull;</span></div>
+                <div class="example-heap"><span>Heap 3:</span> <span class="stones">&bull; &bull; &bull; &bull; &bull;</span></div>
+              </div>
+              <p class="example-caption">Classic 1-3-5 configuration</p>
+            </div>
+
+            <h3>Normal vs Misere</h3>
+            <div class="learn-compare">
+              <div class="compare-card">
+                <h4>Normal Nim</h4>
+                <p>The player who takes the <strong>last object wins</strong>.</p>
+              </div>
+              <div class="compare-card highlight">
+                <h4>Misere Nim</h4>
+                <p>The player who takes the <strong>last object loses</strong>.</p>
+                <span class="badge">This game</span>
+              </div>
+            </div>
+
+            <h3>Why Study Nim?</h3>
+            <p>Nim is one of the foundational games in combinatorial game theory. It's simple enough to solve completely, yet rich enough to demonstrate key concepts used in AI, economics, and computer science:</p>
+            <ul>
+              <li>Binary arithmetic and XOR operations</li>
+              <li>Game state analysis and optimal decision-making</li>
+              <li>Reinforcement learning in discrete environments</li>
+              <li>The difference between analytical and learned intelligence</li>
+            </ul>
+          </div>
+
+          <!-- NIM SUM -->
+          <div class="learn-panel" data-panel="nimsum">
+            <h2>The Nim Sum (XOR)</h2>
+            <p>The key to solving Nim is the <strong>Nim Sum</strong> — the bitwise XOR of all heap sizes. This single number tells you whether you're in a winning or losing position.</p>
+
+            <div class="learn-calculator">
+              <h4>Interactive XOR Calculator</h4>
+              <div class="calc-inputs" id="calc-inputs">
+                <div class="calc-row">
+                  <label>Heap 1:</label>
+                  <input type="number" class="calc-heap" value="1" min="0" max="15">
+                  <span class="calc-binary"></span>
+                </div>
+                <div class="calc-row">
+                  <label>Heap 2:</label>
+                  <input type="number" class="calc-heap" value="3" min="0" max="15">
+                  <span class="calc-binary"></span>
+                </div>
+                <div class="calc-row">
+                  <label>Heap 3:</label>
+                  <input type="number" class="calc-heap" value="5" min="0" max="15">
+                  <span class="calc-binary"></span>
+                </div>
+              </div>
+              <div class="calc-result" id="calc-result">
+                <div class="calc-xor-line"></div>
+                <div class="calc-nimsum">
+                  <span>Nim Sum = </span>
+                  <span class="nimsum-value" id="nimsum-display">7</span>
+                  <span class="calc-binary" id="nimsum-binary">(0111)</span>
+                </div>
+                <div class="calc-verdict" id="calc-verdict"></div>
+              </div>
+            </div>
+
+            <h3>How XOR Works</h3>
+            <p>XOR (exclusive or) compares bits column by column. If an odd number of 1s appear in a column, the result is 1. Otherwise, it's 0.</p>
+            <div class="xor-table">
+              <table>
+                <thead><tr><th>A</th><th>B</th><th>A XOR B</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>0</td><td>1</td><td>1</td></tr>
+                  <tr><td>1</td><td>0</td><td>1</td></tr>
+                  <tr><td>1</td><td>1</td><td>0</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="learn-example">
+              <h4>Step-by-Step: Computing 1 XOR 3 XOR 5</h4>
+              <p>Convert to binary:</p>
+              <p>1 = 001</p>
+              <p>3 = 011</p>
+              <p>5 = 101</p>
+              <p>XOR column by column:</p>
+              <p>Column 1 (rightmost): 1 XOR 1 XOR 1 = 1</p>
+              <p>Column 2: 0 XOR 1 XOR 0 = 1</p>
+              <p>Column 3: 0 XOR 0 XOR 1 = 1</p>
+              <p><strong>Result: 111 = 7</strong></p>
+            </div>
+          </div>
+
+          <!-- STRATEGY -->
+          <div class="learn-panel" data-panel="strategy">
+            <h2>Winning Strategy</h2>
+            <p>The mathematical solution to Nim is elegant: <strong>always leave your opponent with a Nim Sum of zero</strong>.</p>
+
+            <div class="strategy-rules">
+              <div class="rule-card winning">
+                <h4>Winning Position</h4>
+                <p>Nim Sum &ne; 0</p>
+                <p class="rule-detail">You can always find a move that leaves the opponent with Nim Sum = 0</p>
+              </div>
+              <div class="rule-card losing">
+                <h4>Losing Position</h4>
+                <p>Nim Sum = 0</p>
+                <p class="rule-detail">Any move you make will create a non-zero Nim Sum for your opponent</p>
+              </div>
+            </div>
+
+            <h3>Finding the Optimal Move</h3>
+            <ol class="strategy-steps">
+              <li>Calculate the Nim Sum of all heaps</li>
+              <li>Find a heap where <code>heap XOR nimSum &lt; heap</code></li>
+              <li>Reduce that heap to <code>heap XOR nimSum</code></li>
+              <li>This guarantees the new Nim Sum = 0</li>
+            </ol>
+
+            <div class="learn-example">
+              <h4>Worked Example</h4>
+              <p>Board: [3, 5, 7]</p>
+              <p>Nim Sum: 3 XOR 5 XOR 7 = 011 XOR 101 XOR 111 = 001 = 1</p>
+              <p>Check Heap 1 (3): 3 XOR 1 = 2 &lt; 3 &check;</p>
+              <p><strong>Optimal move:</strong> Remove 1 from Heap 1 (3 &rarr; 2)</p>
+              <p>New board: [2, 5, 7] &rarr; Nim Sum = 2 XOR 5 XOR 7 = 0 &check;</p>
+            </div>
+
+            <div class="learn-example">
+              <h4>Why Does This Work?</h4>
+              <p>XOR has a key property: A XOR A = 0. When you reduce a heap so that the total XOR becomes zero, your opponent's any move will necessarily break the zero — creating a non-zero XOR that you can again reduce to zero. You maintain this invariant until the game ends.</p>
+            </div>
+          </div>
+
+          <!-- MISERE -->
+          <div class="learn-panel" data-panel="misere">
+            <h2>The Misere Twist</h2>
+            <p>In Misere Nim, the last player to move <strong>loses</strong>. This changes the endgame strategy but not the mid-game.</p>
+
+            <h3>Misere Strategy</h3>
+            <div class="strategy-rules">
+              <div class="rule-card">
+                <h4>Mid-Game (heaps &gt; 1 exist)</h4>
+                <p>Play exactly like Normal Nim — maintain Nim Sum = 0 for your opponent.</p>
+                <p class="rule-detail">As long as multiple large heaps exist, the strategies are identical.</p>
+              </div>
+              <div class="rule-card highlight">
+                <h4>Endgame Switch</h4>
+                <p>When all heaps are 0 or 1, leave an <strong>odd</strong> number of size-1 heaps.</p>
+                <p class="rule-detail">This forces your opponent to take the last stone.</p>
+              </div>
+            </div>
+
+            <h3>Why the Switch Works</h3>
+            <p>Consider a position with only size-1 heaps. Each player must take exactly one stone per turn. If there's an odd number of heaps, the first player to move will eventually face the last stone. By leaving an odd number, you ensure <em>your opponent</em> is that player.</p>
+
+            <div class="learn-example">
+              <h4>Endgame Example</h4>
+              <p>Board: [0, 1, 1, 1] (three size-1 heaps)</p>
+              <p>Your opponent takes one &rarr; [0, 0, 1, 1]</p>
+              <p>You take one &rarr; [0, 0, 0, 1]</p>
+              <p>Opponent must take the last stone &rarr; they lose!</p>
+            </div>
+
+            <h3>The Critical Transition</h3>
+            <p>The trickiest part is recognizing <em>when</em> to switch. If exactly one heap has size &gt; 1, you must decide how much to leave in that heap. The rule:</p>
+            <ul>
+              <li>Count the number of size-1 heaps</li>
+              <li>If that count is <strong>even</strong>: reduce the large heap to <strong>1</strong> (making an odd total)</li>
+              <li>If that count is <strong>odd</strong>: reduce the large heap to <strong>0</strong> (keeping an odd total)</li>
+            </ul>
+          </div>
+
+          <!-- Q-LEARNING -->
+          <div class="learn-panel" data-panel="qlearning">
+            <h2>Q-Learning Agent</h2>
+            <p>Q-Learning is a model-free reinforcement learning algorithm. The agent learns which moves are good by playing thousands of games and tracking outcomes — without being told the rules of strategy.</p>
+
+            <h3>Core Concepts</h3>
+            <div class="ql-concepts">
+              <div class="concept-card">
+                <h4>State (s)</h4>
+                <p>The current board configuration, e.g. [1, 3, 5]</p>
+              </div>
+              <div class="concept-card">
+                <h4>Action (a)</h4>
+                <p>A legal move: remove N stones from heap H</p>
+              </div>
+              <div class="concept-card">
+                <h4>Q-Value Q(s,a)</h4>
+                <p>Estimated "quality" of taking action a in state s</p>
+              </div>
+              <div class="concept-card">
+                <h4>Reward (r)</h4>
+                <p>+1 for winning, -1 for losing, 0 otherwise</p>
+              </div>
+            </div>
+
+            <h3>The Update Rule</h3>
+            <div class="formula">
+              Q(s, a) &larr; Q(s, a) + &alpha; [ r + &gamma; &middot; max Q(s', a') &minus; Q(s, a) ]
+            </div>
+            <div class="formula-legend">
+              <span><strong>&alpha;</strong> = learning rate (0.1)</span>
+              <span><strong>&gamma;</strong> = discount factor (0.9)</span>
+              <span><strong>r</strong> = immediate reward</span>
+            </div>
+
+            <h3>Exploration vs Exploitation</h3>
+            <p>The agent uses an <strong>&epsilon;-greedy</strong> policy:</p>
+            <ul>
+              <li>With probability &epsilon;: explore (choose a random move)</li>
+              <li>With probability 1-&epsilon;: exploit (choose the best known move)</li>
+            </ul>
+            <p>&epsilon; starts high (lots of exploration) and decays over training episodes, so the agent gradually shifts from exploration to exploitation as it becomes more confident.</p>
+
+            <h3>Training Process</h3>
+            <div class="learn-example">
+              <h4>How NimLab's Q-Agent Trains</h4>
+              <p>1. Initialize Q-values to 0 for all state-action pairs</p>
+              <p>2. Play 500+ games against an opponent that uses optimal strategy 70% of the time</p>
+              <p>3. After each game, propagate rewards backward through the moves</p>
+              <p>4. The agent gradually learns which moves lead to wins</p>
+              <p>5. Q-values are stored in localStorage and persist between sessions</p>
+            </div>
+
+            <h3>Why Use Q-Learning When XOR Is Perfect?</h3>
+            <div class="learn-example">
+              <p>The XOR strategy computes the optimal move analytically — it's perfect and instant. So why bother with Q-Learning?</p>
+              <ul>
+                <li><strong>Learning from experience</strong> — Q-Learning discovers the same policy without being told the rules</li>
+                <li><strong>Generalizable</strong> — the same algorithm works on games without known mathematical solutions</li>
+                <li><strong>Demonstrates RL fundamentals</strong> — state-action values, temporal difference learning, exploration</li>
+                <li><strong>Comparison value</strong> — two fundamentally different approaches converging on the same answer</li>
+              </ul>
+              <p>The educational value is in seeing that experience-based learning can approximate analytical perfection — and understanding when and why it falls short.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer">
+        <p>NimLab — Exploring Game Theory & Reinforcement Learning</p>
+        <a href="https://github.com/KruthikKoundinyas/nimprojectweb" aria-label="GitHub Repository">
+          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" class="octicon octicon-mark-github v-align-middle color-fg-default">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+        </a>
+      </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        // Tab switching
+        $('.learn-tab').on('click', function() {
+          var tab = $(this).attr('data-tab');
+          $('.learn-tab').removeClass('active');
+          $(this).addClass('active');
+          $('.learn-panel').removeClass('active');
+          $('.learn-panel[data-panel="' + tab + '"]').addClass('active');
+        });
+
+        // XOR Calculator
+        function updateCalculator() {
+          var heaps = [];
+          $('.calc-heap').each(function() {
+            heaps.push(parseInt($(this).val()) || 0);
+          });
+
+          // Update binary displays
+          $('.calc-heap').each(function(i) {
+            var val = parseInt($(this).val()) || 0;
+            $(this).closest('.calc-row').find('.calc-binary').text('(' + val.toString(2).padStart(4, '0') + ')');
+          });
+
+          var nimSum = heaps.reduce(function(a, b) { return a ^ b; }, 0);
+          $('#nimsum-display').text(nimSum);
+          $('#nimsum-binary').text('(' + nimSum.toString(2).padStart(4, '0') + ')');
+
+          var $verdict = $('#calc-verdict');
+          if (nimSum !== 0) {
+            $verdict.text('Winning position for the player to move!').css({
+              'background': 'rgba(113, 239, 176, 0.15)',
+              'color': '#71EFB0',
+              'border': '1px solid rgba(113, 239, 176, 0.3)'
+            });
+          } else {
+            $verdict.text('Losing position — any move helps the opponent.').css({
+              'background': 'rgba(255, 94, 91, 0.15)',
+              'color': '#FF5E5B',
+              'border': '1px solid rgba(255, 94, 91, 0.3)'
+            });
+          }
+        }
+
+        $('.calc-heap').on('input', updateCalculator);
+        updateCalculator();
+
+        // Theme
+        $('.theme-toggle').on('click', function() {
+          $('body').toggleClass('dark-mode');
+          if ($('body').hasClass('dark-mode')) {
+            $(this).text('☀️');
+            localStorage.setItem('nimlab-theme', 'dark');
+          } else {
+            $(this).text('🌙');
+            localStorage.setItem('nimlab-theme', 'light');
+          }
+        });
+
+        if (localStorage.getItem('nimlab-theme') === 'dark') {
+          $('body').addClass('dark-mode');
+          $('.theme-toggle').text('☀️');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+/* TEAM */
+Developer: Kruthik Koundinyas
+GitHub: https://github.com/KruthikKoundinyas
+Portfolio: https://kruthik.vercel.app
+Location: India
+
+/* SITE */
+Name: NimLab
+Description: Interactive Game Theory & Reinforcement Learning Playground
+Technologies: HTML5, CSS3, JavaScript, jQuery, Q-Learning
+Standards: HTML5, CSS3, ES6
+
+/* THANKS */
+Sprague-Grundy Theorem, Charles Bouton (1901), Richard Bellman, Chris Watkins (Q-Learning 1989)

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nimprojectweb.vercel.app/nim/sitemap.xml

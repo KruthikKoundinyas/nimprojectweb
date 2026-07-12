@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Compare AI strategies in Nim — simulate thousands of games between Random, Greedy, Optimal XOR, and Q-Learning agents and visualize win rates." />
+    <meta name="keywords" content="AI comparison, algorithm comparison, q-learning vs optimal, reinforcement learning performance, nim AI simulation" />
+    <meta name="author" content="Kruthik Koundinyas" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#011F3F" />
+    <meta property="og:title" content="NimLab — Compare AI Algorithms" />
+    <meta property="og:description" content="Run AI vs AI simulations: Random, Greedy, Optimal XOR, and Q-Learning. See how learned intelligence compares to mathematical perfection." />
+    <meta property="og:image" content="./assets/images/og-image.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="NimLab — AI Algorithm Comparison" />
+    <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/compare.html" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="manifest" href="./manifest.json" />
+    <title>NimLab — Compare Algorithms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <a href="./index.html">
+        <div type="button" id="returnButton" class="button">← Main Menu</div>
+      </a>
+      <button type="button" class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <h1>Compare Algorithms</h1>
+      <p class="subtitle">Watch AI strategies compete and compare performance</p>
+    </header>
+
+    <main>
+      <div class="compare-container">
+        <div class="compare-setup">
+          <div class="compare-player">
+            <h3>Agent A</h3>
+            <select id="agent-a" title="Select Agent A strategy">
+              <option value="random">Random</option>
+              <option value="greedy">Greedy</option>
+              <option value="optimal" selected>Optimal (XOR)</option>
+              <option value="qlearning">Q-Learning</option>
+            </select>
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-player">
+            <h3>Agent B</h3>
+            <select id="agent-b" title="Select Agent B strategy">
+              <option value="random" selected>Random</option>
+              <option value="greedy">Greedy</option>
+              <option value="optimal">Optimal (XOR)</option>
+              <option value="qlearning">Q-Learning</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="compare-config">
+          <label for="sim-count">Games:</label>
+          <input type="number" id="sim-count" value="200" min="10" max="5000" step="10" title="Number of games to simulate">
+          <label for="sim-board">Board:</label>
+          <input type="text" id="sim-board" value="1,3,5" class="heap-input" title="Comma-separated heap sizes">
+          <label for="sim-animated">Show:</label>
+          <select id="sim-animated" title="How many games to animate">
+            <option value="5">5 live</option>
+            <option value="10" selected>10 live</option>
+            <option value="25">25 live</option>
+            <option value="0">Skip to results</option>
+          </select>
+          <button type="button" class="button" id="btn-simulate">Run Simulation</button>
+        </div>
+
+        <!-- Live simulation viewer -->
+        <div class="sim-live" id="sim-live" style="display:none">
+          <div class="sim-progress">
+            <div class="sim-progress-bar" id="sim-progress-bar"></div>
+          </div>
+          <div class="sim-status" id="sim-status">Running...</div>
+          <div class="sim-viewer">
+            <div class="sim-scoreboard">
+              <span class="sim-score-a" id="sim-score-a">0</span>
+              <span class="sim-score-label">—</span>
+              <span class="sim-score-b" id="sim-score-b">0</span>
+            </div>
+            <div class="sim-board" id="sim-board-view"></div>
+            <div class="sim-move-info" id="sim-move-info"></div>
+          </div>
+        </div>
+
+        <div class="compare-results" id="compare-results" style="display:none">
+          <div class="results-summary" id="results-summary"></div>
+          <div class="results-chart" id="results-chart"></div>
+          <div class="results-details" id="results-details"></div>
+        </div>
+
+        <div class="learn-example" style="margin-top: 40px;">
+          <h4>What to Expect</h4>
+          <p><strong>Optimal (XOR) vs Random:</strong> XOR wins ~90-95% when going first. It has a mathematical advantage from any non-zero Nim Sum position.</p>
+          <p><strong>Optimal vs Q-Learning:</strong> Q-Learning should approach 40-50% wins with good training, but rarely beats a perfect player consistently.</p>
+          <p><strong>Q-Learning vs Random:</strong> After training, Q-Learning typically wins 70-85%, demonstrating that it learned meaningful strategy.</p>
+          <p><strong>Note:</strong> First-mover advantage exists in Nim. Half the games start each agent, so results reflect pure strategy quality.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer">
+        <p>NimLab — Exploring Game Theory & Reinforcement Learning</p>
+        <a href="https://github.com/KruthikKoundinyas/nimprojectweb" aria-label="GitHub Repository">
+          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" class="octicon octicon-mark-github v-align-middle color-fg-default">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+        </a>
+      </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./js/ai.js"></script>
+    <script>
+      $(document).ready(function() {
+        var agentLabels = {
+          random: 'Random',
+          greedy: 'Greedy',
+          optimal: 'Optimal (XOR)',
+          qlearning: 'Q-Learning'
+        };
+
+        var simRunning = false;
+
+        $('#btn-simulate').on('click', function() {
+          if (simRunning) return;
+
+          var agentA = $('#agent-a').val();
+          var agentB = $('#agent-b').val();
+          var count = parseInt($('#sim-count').val()) || 200;
+          var boardStr = $('#sim-board').val().trim();
+          var board = boardStr.split(',').map(function(s) { return parseInt(s.trim()); });
+
+          if (board.some(isNaN) || board.some(function(n) { return n < 1; }) || board.length < 2) {
+            alert('Invalid board configuration.');
+            return;
+          }
+          if (board.length > 6 || board.some(function(n) { return n > 10; })) {
+            alert('Max 6 heaps, max size 10.');
+            return;
+          }
+
+          count = Math.min(count, 5000);
+          count = Math.max(count, 10);
+
+          var animatedCount = parseInt($('#sim-animated').val()) || 10;
+          runAnimatedSimulation(board, agentA, agentB, count, animatedCount);
+        });
+
+        function runAnimatedSimulation(board, agentA, agentB, totalGames, animatedCount) {
+          simRunning = true;
+          $('#btn-simulate').prop('disabled', true).text('Running...');
+          $('#compare-results').hide();
+          $('#sim-live').show();
+
+          var winsA = 0, winsB = 0;
+          var gameIndex = 0;
+
+          var animatedGames = Math.min(totalGames, animatedCount);
+          var batchGames = totalGames - animatedGames;
+
+          function playNextGame() {
+            if (gameIndex >= animatedGames) {
+              runBatchGames();
+              return;
+            }
+
+            var firstMover = (gameIndex % 2 === 0) ? 'a' : 'b';
+            var state = board.slice();
+            var current = firstMover;
+            var moveIndex = 0;
+
+            renderSimBoard(state, board);
+            updateSimStatus('Game ' + (gameIndex + 1) + ' / ' + totalGames);
+            updateSimProgress(gameIndex, totalGames);
+            $('#sim-move-info').text((current === 'a' ? agentLabels[agentA] : agentLabels[agentB]) + ' moves first');
+
+            function playNextMove() {
+              var total = 0;
+              for (var i = 0; i < state.length; i++) total += state[i];
+              if (total === 0) {
+                var lastMover = (current === 'a') ? 'b' : 'a';
+                var winner = (lastMover === 'a') ? 'b' : 'a';
+                if (winner === 'a') winsA++; else winsB++;
+                updateSimScores(winsA, winsB);
+
+                var winnerLabel = (winner === 'a') ? agentLabels[agentA] : agentLabels[agentB];
+                $('#sim-move-info').html('<strong>' + winnerLabel + ' wins!</strong> (took last stone = loss)');
+
+                gameIndex++;
+                setTimeout(playNextGame, 400);
+                return;
+              }
+
+              var move;
+              if (current === 'a') {
+                move = getAgentMove(state, agentA);
+              } else {
+                move = getAgentMove(state, agentB);
+              }
+
+              if (!move || move.count <= 0) {
+                gameIndex++;
+                setTimeout(playNextGame, 200);
+                return;
+              }
+
+              var moverLabel = (current === 'a') ? agentLabels[agentA] : agentLabels[agentB];
+              var moverClass = (current === 'a') ? 'agent-a' : 'agent-b';
+
+              // Highlight stones being removed
+              highlightMove(move.row, state[move.row], move.count, moverClass);
+
+              state[move.row] -= move.count;
+              current = (current === 'a') ? 'b' : 'a';
+              moveIndex++;
+
+              $('#sim-move-info').html('<span class="' + moverClass + '">' + moverLabel + '</span> removes ' + move.count + ' from Heap ' + (move.row + 1));
+
+              setTimeout(function() {
+                renderSimBoard(state, board);
+                setTimeout(playNextMove, 150);
+              }, 250);
+            }
+
+            setTimeout(playNextMove, 300);
+          }
+
+          function runBatchGames() {
+            // Run remaining games instantly but update progress
+            var batchSize = 50;
+            var batchIndex = 0;
+
+            function processBatch() {
+              var end = Math.min(batchIndex + batchSize, batchGames);
+              for (var i = batchIndex; i < end; i++) {
+                var gIdx = animatedGames + i;
+                var firstMover = (gIdx % 2 === 0) ? 'a' : 'b';
+                var winner = simulateGameFast(board.slice(), agentA, agentB, firstMover);
+                if (winner === 'a') winsA++; else winsB++;
+              }
+              batchIndex = end;
+              updateSimScores(winsA, winsB);
+              updateSimProgress(animatedGames + batchIndex, totalGames);
+              updateSimStatus('Game ' + (animatedGames + batchIndex) + ' / ' + totalGames);
+
+              if (batchIndex < batchGames) {
+                setTimeout(processBatch, 0);
+              } else {
+                finishSimulation(agentA, agentB, winsA, winsB, totalGames);
+              }
+            }
+
+            if (batchGames > 0) {
+              processBatch();
+            } else {
+              finishSimulation(agentA, agentB, winsA, winsB, totalGames);
+            }
+          }
+
+          playNextGame();
+        }
+
+        function simulateGameFast(state, agentAType, agentBType, firstMover) {
+          var current = firstMover;
+          var moves = 0;
+          while (moves < 200) {
+            var total = 0;
+            for (var i = 0; i < state.length; i++) total += state[i];
+            if (total === 0) break;
+            var move = (current === 'a') ? getAgentMove(state, agentAType) : getAgentMove(state, agentBType);
+            if (!move || move.count <= 0) break;
+            state[move.row] -= move.count;
+            current = (current === 'a') ? 'b' : 'a';
+            moves++;
+          }
+          var lastMover = (current === 'a') ? 'b' : 'a';
+          return (lastMover === 'a') ? 'b' : 'a';
+        }
+
+        function renderSimBoard(state, initialBoard) {
+          var html = '';
+          for (var i = 0; i < state.length; i++) {
+            html += '<div class="sim-heap-row">';
+            html += '<span class="sim-heap-label">H' + (i + 1) + '</span>';
+            for (var j = 0; j < initialBoard[i]; j++) {
+              var cls = j < state[i] ? 'sim-stone' : 'sim-stone gone';
+              html += '<span class="' + cls + '"></span>';
+            }
+            html += '<span class="sim-heap-count">' + state[i] + '</span>';
+            html += '</div>';
+          }
+          $('#sim-board-view').html(html);
+        }
+
+        function highlightMove(row, currentSize, count, moverClass) {
+          var $rows = $('#sim-board-view .sim-heap-row');
+          var $stones = $rows.eq(row).find('.sim-stone:not(.gone)');
+          $stones.slice(-count).addClass('removing ' + moverClass);
+        }
+
+        function updateSimScores(a, b) {
+          $('#sim-score-a').text(a);
+          $('#sim-score-b').text(b);
+        }
+
+        function updateSimProgress(current, total) {
+          var pct = ((current / total) * 100).toFixed(1);
+          $('#sim-progress-bar').css('width', pct + '%');
+        }
+
+        function updateSimStatus(text) {
+          $('#sim-status').text(text);
+        }
+
+        function finishSimulation(agentA, agentB, winsA, winsB, total) {
+          simRunning = false;
+          $('#btn-simulate').prop('disabled', false).text('Run Simulation');
+          updateSimStatus('Complete — ' + total + ' games');
+          updateSimProgress(total, total);
+          displayResults(agentA, agentB, winsA, winsB, total);
+        }
+
+        function displayResults(agentA, agentB, winsA, winsB, total) {
+          var pctA = ((winsA / total) * 100).toFixed(1);
+          var pctB = ((winsB / total) * 100).toFixed(1);
+
+          var summaryHtml = '<div class="result-card">' +
+            '<h4>' + agentLabels[agentA] + '</h4>' +
+            '<div class="result-winrate">' + pctA + '%</div>' +
+            '<div class="result-label">' + winsA + ' wins</div>' +
+            '</div>' +
+            '<div class="result-card draw-card">' +
+            '<h4>Total</h4>' +
+            '<div class="result-winrate">' + total + '</div>' +
+            '<div class="result-label">games</div>' +
+            '</div>' +
+            '<div class="result-card">' +
+            '<h4>' + agentLabels[agentB] + '</h4>' +
+            '<div class="result-winrate">' + pctB + '%</div>' +
+            '<div class="result-label">' + winsB + ' wins</div>' +
+            '</div>';
+
+          $('#results-summary').html(summaryHtml);
+
+          var chartHtml = '<div class="chart-bar-a" style="width:' + pctA + '%">' + pctA + '%</div>' +
+            '<div class="chart-bar-b" style="width:' + pctB + '%">' + pctB + '%</div>';
+          $('#results-chart').html(chartHtml);
+
+          var details = agentLabels[agentA] + ' won ' + winsA + ' / ' + total + ' games (' + pctA + '%)  |  ' +
+            agentLabels[agentB] + ' won ' + winsB + ' / ' + total + ' games (' + pctB + '%)';
+          $('#results-details').text(details);
+
+          $('#compare-results').show();
+        }
+
+        // Theme
+        $('.theme-toggle').on('click', function() {
+          $('body').toggleClass('dark-mode');
+          if ($('body').hasClass('dark-mode')) {
+            $(this).text('☀️');
+            localStorage.setItem('nimlab-theme', 'dark');
+          } else {
+            $(this).text('🌙');
+            localStorage.setItem('nimlab-theme', 'light');
+          }
+        });
+
+        if (localStorage.getItem('nimlab-theme') === 'dark') {
+          $('body').addClass('dark-mode');
+          $('.theme-toggle').text('☀️');
+        }
+      });
+    </script>
+  </body>
+</html>

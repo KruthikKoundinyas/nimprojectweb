@@ -1,462 +1,690 @@
-// game-core.js - Core game logic for NIM game
+// game-core.js - Core game logic for NimLab
 
 // Game state
 const gameState = {
-  rows: [1, 3, 5], // Default NIM configuration: 1 object in row 1, 3 in row 2, 5 in row 3
-  currentPlayer: "player", // 'player' or 'ai'
+  rows: [1, 3, 5],
+  initialRows: [1, 3, 5],
+  currentPlayer: "player",
   gameOver: false,
-  difficulty: "easy", // 'easy', 'medium', 'hard', 'q-learning'
-  selectedButtons: [], // Keep track of currently selected buttons
-  turnInProgress: false, // Flag to prevent multiple moves at once
+  gameStarted: false,
+  difficulty: "random",
+  selectedButtons: [],
+  turnInProgress: false,
   soundEnabled: true,
+  moveHistory: [],
+  moveCount: 0,
+  generation: 0,
 };
 
-// Audio element for button press sound
+// Audio
 const buttonSound = new Audio("./assets/audio/buttonPressSound.mp3");
+buttonSound.preload = "auto";
 
-// Initialize the game
-function initGame() {
-  // Set up the game board
-  renderGameBoard();
+// --- GAME BOARD RENDERING ---
 
-  // Set up event listeners
-  setupEventListeners();
+function buildGameBoard() {
+  const $board = $("#game-board");
+  $board.empty();
 
-  // Update UI elements
-  updateUI();
-
-  console.log("Game initialized");
-}
-
-// Render the game board based on current state
-function renderGameBoard() {
-  // Clear existing buttons
-  $(".btn").removeClass("selected");
-
-  // Hide all buttons initially
-  $(".btn").hide();
-
-  // Show buttons according to the current game state
   for (let rowIndex = 0; rowIndex < gameState.rows.length; rowIndex++) {
-    const rowCount = gameState.rows[rowIndex];
-    const $row = $(`#row${rowIndex + 1}`);
+    const count = gameState.rows[rowIndex];
+    const $row = $('<div class="row"></div>').attr("id", "row" + (rowIndex + 1));
+    $row.append('<span class="row-label">Heap ' + (rowIndex + 1) + " (" + count + ")</span>");
 
-    // Show the correct number of buttons in each row
-    $row.find(".btn").each(function (buttonIndex) {
-      if (buttonIndex < rowCount) {
-        $(this).show();
-      }
-    });
+    for (let i = 0; i < count; i++) {
+      const $btn = $('<div class="btn" tabindex="0" role="button"></div>');
+      $btn.attr("data-row", rowIndex);
+      $btn.attr("data-index", i);
+      $btn.attr("aria-label", "Stone " + (i + 1) + " in Heap " + (rowIndex + 1));
+      $row.append($btn);
+    }
+    $board.append($row);
   }
 }
 
-// Set up event listeners
-function setupEventListeners() {
-  // Button click event
-  $(".btn").on("click", function () {
-    if (
-      gameState.gameOver ||
-      gameState.currentPlayer !== "player" ||
-      gameState.turnInProgress
-    ) {
-      return;
-    }
+function renderGameBoard() {
+  for (let rowIndex = 0; rowIndex < gameState.rows.length; rowIndex++) {
+    const $row = $("#row" + (rowIndex + 1));
+    const $buttons = $row.find(".btn");
+    const remaining = gameState.rows[rowIndex];
 
-    // Check if button is already selected
-    if ($(this).hasClass("selected")) {
-      $(this).removeClass("selected");
-      gameState.selectedButtons = gameState.selectedButtons.filter(
-        (button) => button !== this
-      );
-    } else {
-      // Check if button is in the same row as already selected buttons
-      const rowId = $(this).parent().attr("id");
-
-      if (
-        gameState.selectedButtons.length === 0 ||
-        $(gameState.selectedButtons[0]).parent().attr("id") === rowId
-      ) {
-        // Add to selected buttons
-        $(this).addClass("selected");
-        gameState.selectedButtons.push(this);
-
-        // Play sound
-        if (gameState.soundEnabled) {
-          buttonSound.currentTime = 0;
-          buttonSound.play();
-        }
+    $buttons.each(function (i) {
+      if (i < remaining) {
+        $(this).show().removeClass("selected");
       } else {
-        // Show error message (buttons must be from same row)
-        showMessage("Select buttons from the same row only", "error");
+        $(this).hide().removeClass("selected");
       }
+    });
+
+    $row.find(".row-label").text("Heap " + (rowIndex + 1) + " (" + remaining + ")");
+  }
+}
+
+// --- EVENT LISTENERS ---
+
+function setupEventListeners() {
+  $(document).on("keydown", "#game-board .btn", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      $(this).trigger("click");
     }
   });
 
-  // Next button click event
+  $(document).on("click", "#game-board .btn", function () {
+    if (gameState.gameOver || gameState.currentPlayer !== "player" || gameState.turnInProgress || !gameState.gameStarted) {
+      return;
+    }
+    if (!$(this).is(":visible")) return;
+
+    const rowIndex = parseInt($(this).attr("data-row"));
+
+    if ($(this).hasClass("selected")) {
+      $(this).removeClass("selected");
+      gameState.selectedButtons = gameState.selectedButtons.filter(function (b) {
+        return b !== this;
+      }.bind(this));
+      return;
+    }
+
+    // Ensure all selections are from the same row
+    if (gameState.selectedButtons.length > 0) {
+      const existingRow = parseInt($(gameState.selectedButtons[0]).attr("data-row"));
+      if (existingRow !== rowIndex) {
+        showMessage("You must select from the same heap!", "error");
+        return;
+      }
+    }
+
+    $(this).addClass("selected");
+    gameState.selectedButtons.push(this);
+
+    if (gameState.soundEnabled) {
+      buttonSound.currentTime = 0;
+      buttonSound.play().catch(function () {});
+    }
+  });
+
   $(".next").on("click", function () {
+    if (!gameState.gameStarted) {
+      startGame();
+      return;
+    }
     if (gameState.gameOver) {
       resetGame();
       return;
     }
-
     if (gameState.currentPlayer === "player") {
       playerMove();
-    } else {
-      aiMove();
     }
   });
 
-  // Restart button click event
   $(".restart").on("click", function () {
     resetGame();
   });
 
-  // Difficulty buttons
-  $(".difficulty button").on("click", function () {
-    // Update difficulty
-    gameState.difficulty = $(this).attr("class").split(" ")[0];
-
-    // Update active class
-    $(".difficulty button").removeClass("active");
+  $(".difficulty button, .diff-btn").on("click", function () {
+    var diff = $(this).attr("data-difficulty") || $(this).attr("class").split(" ")[0];
+    gameState.difficulty = diff;
+    $(".difficulty button, .diff-btn").removeClass("active");
     $(this).addClass("active");
-
-    // Restart game if it's already over
-    if (gameState.gameOver) {
-      resetGame();
-    }
-
-    // Show appropriate message
-    showMessage(
-      `Difficulty set to ${
-        gameState.difficulty.charAt(0).toUpperCase() +
-        gameState.difficulty.slice(1)
-      }`,
-      "info"
-    );
+    showMessage("AI: " + getDifficultyLabel(diff), "info");
   });
+
+  $("#sound-toggle").on("click", function () {
+    gameState.soundEnabled = !gameState.soundEnabled;
+    $(this).text("Sound: " + (gameState.soundEnabled ? "ON" : "OFF"));
+  });
+
+  $("#btn-random-board").on("click", function () {
+    var numHeaps = 2 + Math.floor(Math.random() * 3);
+    var heaps = [];
+    for (var i = 0; i < numHeaps; i++) {
+      heaps.push(1 + Math.floor(Math.random() * 7));
+    }
+    $("#heap-config").val(heaps.join(","));
+    if (!gameState.gameStarted) {
+      showMessage("Board: [" + heaps.join(", ") + "]", "info");
+    }
+  });
+
+  // Theme toggle
+  $(".theme-toggle").on("click", function () {
+    $("body").toggleClass("dark-mode");
+    if ($("body").hasClass("dark-mode")) {
+      $(this).text("☀️");
+      localStorage.setItem("nimlab-theme", "dark");
+    } else {
+      $(this).text("🌙");
+      localStorage.setItem("nimlab-theme", "light");
+    }
+  });
+
+  if (localStorage.getItem("nimlab-theme") === "dark") {
+    $("body").addClass("dark-mode");
+    $(".theme-toggle").text("☀️");
+  }
 }
 
-// Player makes a move
+function getDifficultyLabel(diff) {
+  var labels = { random: "Random", greedy: "Greedy", optimal: "Optimal (XOR)", qlearning: "Q-Learning" };
+  return labels[diff] || diff;
+}
+
+// --- GAME FLOW ---
+
+function startGame() {
+  var configVal = $("#heap-config").val().trim();
+  var heaps = configVal.split(",").map(function (s) { return parseInt(s.trim()); });
+
+  // Validate
+  if (heaps.some(isNaN) || heaps.some(function (n) { return n < 1; }) || heaps.length < 2) {
+    showMessage("Invalid board config. Use comma-separated numbers ≥ 1 (min 2 heaps).", "error");
+    return;
+  }
+  if (heaps.length > 6) {
+    showMessage("Maximum 6 heaps allowed.", "error");
+    return;
+  }
+  if (heaps.some(function (n) { return n > 10; })) {
+    showMessage("Maximum heap size is 10.", "error");
+    return;
+  }
+
+  gameState.rows = heaps.slice();
+  gameState.initialRows = heaps.slice();
+  gameState.gameStarted = true;
+  gameState.gameOver = false;
+  gameState.currentPlayer = "player";
+  gameState.selectedButtons = [];
+  gameState.turnInProgress = false;
+  gameState.moveHistory = [];
+  gameState.moveCount = 0;
+
+  buildGameBoard();
+  updateUI();
+  updateInspector();
+  showMoveLog();
+
+  $(".next").text("Confirm Move");
+  $("#level-title").text("Your Turn");
+  showMessage("Game started! Select stones from one heap, then confirm.", "info");
+}
+
 function playerMove() {
   if (gameState.selectedButtons.length === 0) {
-    showMessage("Select at least one button", "error");
+    showMessage("Select at least one stone to remove!", "error");
     return;
   }
 
   gameState.turnInProgress = true;
 
-  // Get row index from the first selected button
-  const rowId = $(gameState.selectedButtons[0]).parent().attr("id");
-  const rowIndex = parseInt(rowId.replace("row", "")) - 1;
+  var rowIndex = parseInt($(gameState.selectedButtons[0]).attr("data-row"));
+  var count = gameState.selectedButtons.length;
 
-  // Update game state
-  gameState.rows[rowIndex] -= gameState.selectedButtons.length;
-
-  // Check if game is over
-  if (isGameOver()) {
-    endGame("player");
+  // Safeguard: validate move
+  if (count > gameState.rows[rowIndex]) {
+    showMessage("Invalid move — not enough stones in that heap.", "error");
+    gameState.turnInProgress = false;
     return;
   }
 
-  // Switch to AI's turn
-  gameState.currentPlayer = "ai";
+  // Record move
+  gameState.moveCount++;
+  gameState.moveHistory.push({
+    player: "You",
+    heap: rowIndex + 1,
+    removed: count,
+    board: gameState.rows.slice(),
+  });
+
+  gameState.rows[rowIndex] -= count;
   gameState.selectedButtons = [];
 
-  // Update UI
-  updateUI();
+  renderGameBoard();
+  appendMoveLog("You", rowIndex + 1, count);
 
-  // Schedule AI move after a short delay
-  setTimeout(aiMove, 1000);
-}
-
-// AI makes a move
-function aiMove() {
-  if (gameState.gameOver) return;
-
-  gameState.turnInProgress = true;
-
-  // Determine move based on difficulty
-  let move;
-
-  switch (gameState.difficulty) {
-    case "easy":
-      move = makeEasyMove();
-      break;
-    case "medium":
-      move = makeMediumMove();
-      break;
-    case "hard":
-      move = makeHardMove();
-      break;
-    case "q-learning":
-      move = makeQLearningMove();
-      break;
-    default:
-      move = makeEasyMove();
+  if (checkGameOver("player")) {
+    gameState.turnInProgress = false;
+    return;
   }
 
-  // Visualize AI's move
+  gameState.currentPlayer = "ai";
+  updateUI();
+  updateInspector();
+
+  var gen = gameState.generation;
+  setTimeout(function () {
+    if (gameState.generation !== gen) return;
+    aiMove();
+  }, 800);
+}
+
+function aiMove() {
+  if (gameState.gameOver) return;
+  gameState.turnInProgress = true;
+
+  var move;
+  switch (gameState.difficulty) {
+    case "random": move = makeRandomMove(); break;
+    case "greedy": move = makeGreedyMove(); break;
+    case "optimal": move = makeOptimalMove(); break;
+    case "qlearning": move = makeQLearningMove(); break;
+    default: move = makeRandomMove();
+  }
+
+  // Safeguard
+  if (!move || move.count <= 0 || move.row < 0 || move.row >= gameState.rows.length || move.count > gameState.rows[move.row]) {
+    move = makeFallbackMove();
+  }
+
+  gameState.moveCount++;
+  gameState.moveHistory.push({
+    player: "AI (" + getDifficultyLabel(gameState.difficulty) + ")",
+    heap: move.row + 1,
+    removed: move.count,
+    board: gameState.rows.slice(),
+  });
+
   visualizeAIMove(move.row, move.count);
 }
 
-// Make an easy AI move (random)
-function makeEasyMove() {
-  // Find non-empty rows
-  const nonEmptyRows = [];
-  for (let i = 0; i < gameState.rows.length; i++) {
+function makeFallbackMove() {
+  for (var i = 0; i < gameState.rows.length; i++) {
     if (gameState.rows[i] > 0) {
-      nonEmptyRows.push(i);
+      return { row: i, count: 1 };
     }
   }
-
-  // Choose a random non-empty row
-  const rowIndex =
-    nonEmptyRows[Math.floor(Math.random() * nonEmptyRows.length)];
-
-  // Choose a random number of objects to remove (1 to all in the row)
-  const maxToRemove = gameState.rows[rowIndex];
-  const count = Math.floor(Math.random() * maxToRemove) + 1;
-
-  // Return the move
-  return { row: rowIndex, count: count };
+  return { row: 0, count: 1 };
 }
 
-// Make a medium AI move (some strategy)
-function makeMediumMove() {
-  // 50% chance of making a strategic move, 50% chance of making a random move
-  if (Math.random() < 0.5) {
-    return makeHardMove();
-  } else {
-    return makeEasyMove();
+// --- AI STRATEGIES ---
+
+function makeRandomMove() {
+  var nonEmpty = [];
+  for (var i = 0; i < gameState.rows.length; i++) {
+    if (gameState.rows[i] > 0) nonEmpty.push(i);
   }
+  var row = nonEmpty[Math.floor(Math.random() * nonEmpty.length)];
+  var count = 1 + Math.floor(Math.random() * gameState.rows[row]);
+  return { row: row, count: count };
 }
 
-// Make a hard AI move (nim-sum strategy)
-function makeHardMove() {
-  // Calculate nim-sum
-  let nimSum = gameState.rows.reduce((xor, count) => xor ^ count, 0);
+function makeGreedyMove() {
+  // Takes the most from the largest heap, but 40% chance of random
+  if (Math.random() < 0.4) return makeRandomMove();
 
-  // If nim-sum is zero, make a random move
-  if (nimSum === 0) {
-    return makeEasyMove();
+  var maxRow = 0;
+  for (var i = 1; i < gameState.rows.length; i++) {
+    if (gameState.rows[i] > gameState.rows[maxRow]) maxRow = i;
+  }
+  var count = Math.max(1, Math.floor(gameState.rows[maxRow] / 2));
+  return { row: maxRow, count: count };
+}
+
+function makeOptimalMove() {
+  // Correct Misère Nim strategy
+  var rows = gameState.rows;
+  var nimSum = 0;
+  for (var i = 0; i < rows.length; i++) nimSum ^= rows[i];
+
+  // Check if we're in the endgame (all heaps ≤ 1)
+  var heapsAboveOne = 0;
+  var nonEmptyHeaps = 0;
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i] > 1) heapsAboveOne++;
+    if (rows[i] > 0) nonEmptyHeaps++;
   }
 
-  // Find a row where removing objects creates a zero nim-sum
-  for (let i = 0; i < gameState.rows.length; i++) {
-    if (gameState.rows[i] > 0) {
-      const rowNimSum = nimSum ^ gameState.rows[i];
+  // Misère endgame: all heaps are 0 or 1
+  if (heapsAboveOne === 0) {
+    // Leave odd number of heaps (opponent takes last)
+    if (nonEmptyHeaps % 2 === 0) {
+      // Take one stone from any heap of size 1
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i] === 1) return { row: i, count: 1 };
+      }
+    }
+    // Already odd — any move is forced
+    return makeRandomMove();
+  }
 
-      // Check how many objects to remove to make nim-sum zero
-      for (let remove = 1; remove <= gameState.rows[i]; remove++) {
-        if ((gameState.rows[i] - remove) ^ (rowNimSum === 0)) {
-          return { row: i, count: remove };
-        }
+  // Misère mid-game: if exactly one heap > 1
+  if (heapsAboveOne === 1) {
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i] > 1) {
+        // Count heaps of size 1
+        var onesCount = nonEmptyHeaps - 1;
+        // Leave odd number of size-1 heaps total (misère)
+        var target = (onesCount % 2 === 0) ? 1 : 0;
+        return { row: i, count: rows[i] - target };
       }
     }
   }
 
-  // If no winning move found, remove one object from the row with the most objects
-  const maxRowIndex = gameState.rows.indexOf(Math.max(...gameState.rows));
-  return { row: maxRowIndex, count: 1 };
-}
-
-// Make a Q-learning based move
-function makeQLearningMove() {
-  // Convert current game state to the format used by Q-learning
-  const state = [...gameState.rows];
-
-  // Choose action using Q-learning algorithm
-  const action = chooseAction(state);
-
-  // If no action found (unlikely), fall back to medium difficulty
-  if (!action) {
-    return makeMediumMove();
+  // Normal Nim strategy: make nimSum = 0
+  if (nimSum === 0) {
+    return makeRandomMove();
   }
 
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i] > 0) {
+      var target = rows[i] ^ nimSum;
+      if (target < rows[i]) {
+        return { row: i, count: rows[i] - target };
+      }
+    }
+  }
+
+  return makeRandomMove();
+}
+
+function makeQLearningMove() {
+  var state = gameState.rows.slice();
+  var action = chooseAction(state, 0.05);
+  if (!action) return makeGreedyMove();
   return action;
 }
 
-// Visualize AI's move
-// Visualize AI's move (continued)
+// --- MOVE VISUALIZATION ---
+
 function visualizeAIMove(rowIndex, count) {
-  // Get the row
-  const $row = $(`#row${rowIndex + 1}`);
+  var gen = gameState.generation;
+  var $row = $("#row" + (rowIndex + 1));
+  var $visible = $row.find(".btn:visible");
+  var $toRemove = $visible.slice(-count);
+  var processed = 0;
 
-  // Get the visible buttons in the row
-  const $visibleButtons = $row.find(".btn:visible");
-
-  // Highlight buttons from right to left
-  const buttonsToRemove = $visibleButtons.slice(-count);
-
-  // Animate selection
-  let buttonsProcessed = 0;
-
-  function animateNextButton() {
-    if (buttonsProcessed < buttonsToRemove.length) {
-      $(buttonsToRemove[buttonsProcessed]).addClass("selected");
-
-      // Play sound
+  function animateNext() {
+    if (gameState.generation !== gen) return;
+    if (processed < $toRemove.length) {
+      $($toRemove[processed]).addClass("selected");
       if (gameState.soundEnabled) {
         buttonSound.currentTime = 0;
-        buttonSound.play();
+        buttonSound.play().catch(function () {});
       }
-
-      buttonsProcessed++;
-      setTimeout(animateNextButton, 300); // Add delay between button selections
+      processed++;
+      setTimeout(animateNext, 250);
     } else {
-      // After all buttons are highlighted, complete the move
-      setTimeout(completeAIMove, 800, rowIndex, count);
+      setTimeout(function () {
+        if (gameState.generation !== gen) return;
+        completeAIMove(rowIndex, count);
+      }, 600);
+    }
+  }
+  animateNext();
+}
+
+function completeAIMove(rowIndex, count) {
+  gameState.rows[rowIndex] -= count;
+  $(".btn").removeClass("selected");
+
+  renderGameBoard();
+  appendMoveLog("AI", rowIndex + 1, count);
+
+  if (checkGameOver("ai")) return;
+
+  gameState.currentPlayer = "player";
+  gameState.turnInProgress = false;
+  gameState.selectedButtons = [];
+  updateUI();
+  updateInspector();
+  $("#game-board .btn:visible:first").trigger("focus");
+}
+
+// --- GAME END ---
+
+function checkGameOver(lastMover) {
+  var totalRemaining = 0;
+  for (var i = 0; i < gameState.rows.length; i++) totalRemaining += gameState.rows[i];
+
+  if (totalRemaining === 0) {
+    gameState.gameOver = true;
+    // Misère: the player who took the last stone loses
+    var winner = (lastMover === "player") ? "AI" : "You";
+    var loser = (lastMover === "player") ? "You" : "AI";
+
+    $("#level-title").text(winner + " Win" + (winner === "You" ? "!" : "s!"));
+    $(".turn-indicator, #turn-indicator").text(winner + " Win" + (winner === "You" ? "!" : "s!"));
+    $(".next").text("New Game");
+    gameState.turnInProgress = false;
+
+    updateInspectorGameOver(winner, loser);
+
+    if (gameState.difficulty === "qlearning") {
+      saveQValues();
+    }
+
+    return true;
+  }
+  return false;
+}
+
+// --- RESET ---
+
+function resetGame() {
+  gameState.generation++;
+  gameState.rows = gameState.initialRows.slice();
+  gameState.gameStarted = false;
+  gameState.gameOver = true;
+  gameState.currentPlayer = "player";
+  gameState.selectedButtons = [];
+  gameState.turnInProgress = false;
+  gameState.moveHistory = [];
+  gameState.moveCount = 0;
+
+  buildGameBoard();
+
+  $(".next").prop("disabled", false);
+  $("#level-title").text("Choose Difficulty & Press Start");
+  $(".turn-indicator, #turn-indicator").text("Your Turn").removeClass("player ai");
+  $(".next").text("Start");
+  $("#move-log").hide();
+  $("#inspector-content").html('<p class="inspector-placeholder">Start a game to see AI analysis</p>');
+
+  gameState.gameOver = false;
+}
+
+// --- UI UPDATES ---
+
+function updateUI() {
+  if (!gameState.gameStarted || gameState.gameOver) return;
+
+  var turnText = gameState.currentPlayer === "player" ? "Your Turn" : "AI Thinking...";
+  $(".turn-indicator, #turn-indicator").text(turnText).removeClass("player ai").addClass(gameState.currentPlayer);
+  $("#level-title").text(turnText);
+
+  $(".next").prop("disabled", gameState.currentPlayer === "ai");
+}
+
+function showMessage(message, type) {
+  var $msg = $("#game-message");
+  if ($msg.length === 0) {
+    $msg = $('<div id="game-message"></div>');
+    $(".controls").after($msg);
+  }
+  $msg.text(message).removeClass("info error success").addClass(type).fadeIn(200);
+  setTimeout(function () { $msg.fadeOut(500); }, 3000);
+}
+
+// --- MOVE LOG ---
+
+function showMoveLog() {
+  $("#move-log").show();
+  $("#log-entries").empty();
+}
+
+function appendMoveLog(player, heap, count) {
+  var entry = '<div class="log-entry ' + (player === "You" ? "player" : "ai") + '">';
+  entry += "<span class='log-player'>" + player + ":</span> ";
+  entry += "Removed " + count + " from Heap " + heap;
+  entry += " → [" + gameState.rows.join(", ") + "]";
+  entry += "</div>";
+  var $entries = $("#log-entries");
+  $entries.append(entry);
+  if ($entries[0]) $entries.scrollTop($entries[0].scrollHeight);
+}
+
+// --- ALGORITHM INSPECTOR ---
+
+function updateInspector() {
+  var rows = gameState.rows;
+  var nimSum = 0;
+  for (var i = 0; i < rows.length; i++) nimSum ^= rows[i];
+
+  var totalStones = 0;
+  for (var i = 0; i < rows.length; i++) totalStones += rows[i];
+
+  // Calculate optimal move
+  var optimalMove = calculateOptimalMove(rows);
+
+  var html = "";
+
+  // Current board state
+  html += '<div class="insp-section">';
+  html += "<h4>Board State</h4>";
+  html += '<div class="insp-board">';
+  for (var i = 0; i < rows.length; i++) {
+    html += '<div class="insp-heap">Heap ' + (i + 1) + ': <strong>' + rows[i] + "</strong>";
+    html += ' <span class="insp-binary">(' + rows[i].toString(2).padStart(4, "0") + ")</span></div>";
+  }
+  html += "</div></div>";
+
+  // Nim Sum
+  html += '<div class="insp-section">';
+  html += "<h4>Nim Sum (XOR)</h4>";
+  html += '<div class="insp-nimsum">';
+  html += '<span class="nimsum-value">' + nimSum + "</span>";
+  html += ' <span class="insp-binary">(' + nimSum.toString(2).padStart(4, "0") + ")</span>";
+  html += "</div>";
+
+  if (nimSum !== 0) {
+    html += '<div class="insp-verdict winning">Winning position (for mover)</div>';
+  } else {
+    html += '<div class="insp-verdict losing">Losing position (for mover)</div>';
+  }
+  html += "</div>";
+
+  // Optimal move
+  if (optimalMove && totalStones > 0) {
+    html += '<div class="insp-section">';
+    html += "<h4>Optimal Move</h4>";
+    html += '<div class="insp-move">Remove <strong>' + optimalMove.count + "</strong> from Heap <strong>" + (optimalMove.row + 1) + "</strong></div>";
+    html += '<div class="insp-reason">' + optimalMove.reason + "</div>";
+    html += "</div>";
+  }
+
+  // AI difficulty info
+  html += '<div class="insp-section">';
+  html += "<h4>Current AI: " + getDifficultyLabel(gameState.difficulty) + "</h4>";
+  html += '<div class="insp-desc">' + getAIDescription(gameState.difficulty) + "</div>";
+  html += "</div>";
+
+  // Q-Learning specific info
+  if (gameState.difficulty === "qlearning") {
+    var stateKey = stateToKey(rows);
+    var stateQ = qValues[stateKey];
+    if (stateQ) {
+      var actionCount = Object.keys(stateQ).length;
+      var bestVal = -Infinity;
+      var bestAction = "";
+      for (var key in stateQ) {
+        if (stateQ[key] > bestVal) {
+          bestVal = stateQ[key];
+          bestAction = key;
+        }
+      }
+      html += '<div class="insp-section">';
+      html += "<h4>Q-Learning Info</h4>";
+      html += "<div>Known actions: " + actionCount + "</div>";
+      html += "<div>Best Q-value: " + bestVal.toFixed(3) + "</div>";
+      html += "<div>Best action: " + bestAction + "</div>";
+      html += "</div>";
     }
   }
 
-  // Start animation
-  animateNextButton();
+  $("#inspector-content").html(html);
 }
 
-// Complete AI's move after visualization
-function completeAIMove(rowIndex, count) {
-  // Update game state
-  gameState.rows[rowIndex] -= count;
+function calculateOptimalMove(rows) {
+  var nimSum = 0;
+  for (var i = 0; i < rows.length; i++) nimSum ^= rows[i];
 
-  // Check if game is over
-  if (isGameOver()) {
-    endGame("ai");
-    return;
+  var heapsAboveOne = 0;
+  var nonEmpty = 0;
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i] > 1) heapsAboveOne++;
+    if (rows[i] > 0) nonEmpty++;
   }
 
-  // Clear selected buttons
-  $(".btn").removeClass("selected");
-
-  // Switch to player's turn
-  gameState.currentPlayer = "player";
-  gameState.turnInProgress = false;
-  gameState.selectedButtons = [];
-
-  // Update UI
-  renderGameBoard();
-  updateUI();
-
-  // If using Q-learning, update Q-values based on the move's outcome
-  if (gameState.difficulty === "q-learning") {
-    // Record state transition for learning
-    const oldState = [...gameState.rows];
-    oldState[rowIndex] += count; // Previous state
-    const action = { row: rowIndex, count: count };
-    const newState = [...gameState.rows];
-
-    // Reward is 0 for non-terminal states
-    updateQValues(oldState, action, 0, newState);
-  }
-}
-
-// Check if the game is over
-function isGameOver() {
-  return gameState.rows.every((count) => count === 0);
-}
-
-// End the game and declare winner
-function endGame(lastPlayer) {
-  gameState.gameOver = true;
-
-  // In NIM, the player who takes the last object loses
-  const winner = lastPlayer === "player" ? "AI" : "Player";
-
-  // Update UI
-  $("#level-title").text(`Game Over! ${winner} Wins!`);
-  $(".turn-indicator").text(`${winner} Wins!`).addClass(winner.toLowerCase());
-
-  // Change next button text
-  $(".next").text("New Game");
-
-  // If AI was using Q-learning, update Q-values with final reward
-  if (gameState.difficulty === "q-learning" && lastPlayer === "ai") {
-    // Get the last state and action
-    const finalState = [...gameState.rows];
-    // We don't have the exact action here, but we can reconstruct it
-    // from the game state history (would require additional tracking)
-
-    // For now, approximate with a placeholder reward
-    // Negative reward if AI lost, positive if AI won
-    const reward = lastPlayer === "ai" ? -10 : 10;
-
-    // Update Q-values for this final state
-    // This is simplified; in a full implementation we would track exact state-action pairs
-    saveQValues(); // Save learning progress
-  }
-}
-
-// Reset the game
-function resetGame() {
-  // Reset game state
-  gameState.rows = [1, 3, 5]; // Default NIM configuration
-  gameState.currentPlayer = "player";
-  gameState.gameOver = false;
-  gameState.selectedButtons = [];
-  gameState.turnInProgress = false;
-
-  // Reset UI
-  $("#level-title").text("Your Turn");
-  $(".turn-indicator").text("Your Turn").removeClass("ai").addClass("player");
-  $(".next").text("Next");
-
-  // Render game board
-  renderGameBoard();
-
-  // Update UI
-  updateUI();
-}
-
-// Update UI elements based on current game state
-function updateUI() {
-  // Update turn indicator
-  if (!gameState.gameOver) {
-    const turnText =
-      gameState.currentPlayer === "player" ? "Your Turn" : "AI Thinking...";
-    $(".turn-indicator")
-      .text(turnText)
-      .removeClass("player ai")
-      .addClass(gameState.currentPlayer);
-
-    // Update main title
-    $("#level-title").text(turnText);
+  // Endgame
+  if (heapsAboveOne === 0) {
+    if (nonEmpty % 2 === 0) {
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i] === 1) return { row: i, count: 1, reason: "Misère endgame: leave odd number of size-1 heaps so opponent takes last." };
+      }
+    }
+    return { row: -1, count: 0, reason: "Losing endgame position — any move leads to a loss." };
   }
 
-  // Enable/disable next button
-  if (gameState.currentPlayer === "ai" && !gameState.gameOver) {
-    $(".next").prop("disabled", true);
-  } else {
-    $(".next").prop("disabled", false);
-  }
-}
-
-// Show a message to the user
-function showMessage(message, type = "info") {
-  // Create message element if it doesn't exist
-  if ($("#game-message").length === 0) {
-    $('<div id="game-message"></div>').insertAfter("#game-board");
+  // One heap > 1
+  if (heapsAboveOne === 1) {
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i] > 1) {
+        var onesCount = nonEmpty - 1;
+        var target = (onesCount % 2 === 0) ? 1 : 0;
+        var reason = "Only one heap > 1. Reduce to " + target + " to leave opponent with an odd number of remaining stones.";
+        return { row: i, count: rows[i] - target, reason: reason };
+      }
+    }
   }
 
-  // Set message content and style
-  $("#game-message")
-    .text(message)
-    .removeClass("info error success")
-    .addClass(type)
-    .fadeIn(200);
+  if (nimSum === 0) {
+    return { row: -1, count: 0, reason: "Nim Sum = 0. No winning move exists — any move helps the opponent." };
+  }
 
-  // Hide after 3 seconds
-  setTimeout(() => {
-    $("#game-message").fadeOut(500);
-  }, 3000);
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i] > 0) {
+      var target = rows[i] ^ nimSum;
+      if (target < rows[i]) {
+        var reason = "Heap " + (i + 1) + " XOR Nim Sum = " + target + ". Reducing to " + target + " makes new Nim Sum = 0, putting opponent in a losing position.";
+        return { row: i, count: rows[i] - target, reason: reason };
+      }
+    }
+  }
+
+  return null;
 }
 
-// Toggle sound effects
-function toggleSound() {
-  gameState.soundEnabled = !gameState.soundEnabled;
-  const status = gameState.soundEnabled ? "on" : "off";
-  showMessage(`Sound ${status}`, "info");
+function getAIDescription(diff) {
+  var descs = {
+    random: "Makes completely random legal moves. No strategy. Baseline for comparison.",
+    greedy: "Tends to take from the largest heap. Sometimes random. Moderate difficulty.",
+    optimal: "Uses the XOR (Nim Sum) strategy with Misère endgame awareness. Mathematically perfect play.",
+    qlearning: "Learns from experience using Q-values. May not play optimally but improves over time.",
+  };
+  return descs[diff] || "";
 }
 
-// Initialize the game when document is ready
+function updateInspectorGameOver(winner, loser) {
+  var html = '<div class="insp-section">';
+  html += '<h4 class="insp-gameover">Game Over</h4>';
+  html += "<div><strong>" + winner + "</strong> won!</div>";
+  html += "<div>" + loser + " took the last stone (Misère rule).</div>";
+  html += "</div>";
+
+  html += '<div class="insp-section">';
+  html += "<h4>Game Summary</h4>";
+  html += "<div>Total moves: " + gameState.moveCount + "</div>";
+  html += "<div>AI strategy: " + getDifficultyLabel(gameState.difficulty) + "</div>";
+  html += "<div>Board: [" + gameState.initialRows.join(", ") + "]</div>";
+  html += "</div>";
+
+  $("#inspector-content").html(html);
+}
+
+// --- INIT ---
+
 $(document).ready(function () {
-  initGame();
+  buildGameBoard();
+  setupEventListeners();
 });

@@ -1,257 +1,234 @@
-// Game state variables
-let currentPlayer = 1;
-let gameStarted = false;
-let gameOver = false;
-let selectedRow = null;
+// two-player.js - Two player mode for NimLab
 
-const gameState = {
-  soundEnabled: true,
-  scores: {
-    player1: 0,
-    player2: 0,
-  },
-};
+var currentPlayer = 1;
+var gameStarted = false;
+var gameOver = false;
+var selectedButtons = [];
+var selectedRow = null;
+var heaps = [1, 3, 5];
+var soundEnabled = true;
 
-const buttonSound = new Audio("./assets/audio/buttonPressSound.mp3");
+var buttonSound = new Audio("./assets/audio/buttonPressSound.mp3");
 buttonSound.preload = "auto";
 
+var scores = { player1: 0, player2: 0 };
+
 $(document).ready(function () {
-  // Hide game board initially
-  $("#game-board").hide();
-
-  // Create and add scoreboard
-  createScoreboard();
-
-  // Add sound toggle button
-  $('<button id="sound-toggle" class="button">Sound: ON</button>')
-    .insertAfter(".controls")
-    .on("click", function () {
-      gameState.soundEnabled = !gameState.soundEnabled;
-      $(this).text(`Sound: ${gameState.soundEnabled ? "ON" : "OFF"}`);
-    });
-
-  // Add new game button
-  $('<button id="new-game" class="button">New Game</button>')
-    .insertAfter("#sound-toggle")
-    .on("click", function () {
-      resetGame();
-    });
-
-  // Handle row selection with event delegation
-  $(document).on("click", ".row", function () {
-    if (!gameStarted || gameOver) return;
-
-    // Don't allow selection of empty rows
-    if ($(this).find(".btn:visible").length === 0) {
-      return;
-    }
-
-    // Handle row selection/deselection
-    handleRowSelection($(this));
-  });
-
-  // Handle button clicks with event delegation
-  $(document).on("click", ".btn", function (e) {
-    if (!gameStarted || gameOver) return;
-
-    // Stop event propagation to prevent triggering the row click handler
-    e.stopPropagation();
-
-    const $row = $(this).closest(".row");
-
-    // First ensure a row is selected
-    if (!$row.hasClass("active-row")) {
-      handleRowSelection($row);
-    }
-
-    // Toggle button selection
-    $(this).toggleClass("selected");
-
-    if (gameState.soundEnabled) {
-      buttonSound.currentTime = 0;
-      buttonSound.play();
-    }
-  });
-
-  // Next button handler
-  $(".next").click(function () {
-    if (!gameStarted) {
-      startGame();
-      return;
-    }
-
-    if (!selectedRow) {
-      alert("Please select a row first!");
-      return;
-    }
-
-    const pressedButtons = $(".active-row .btn.selected").length;
-    if (pressedButtons === 0) {
-      alert("You must select at least one piece to remove!");
-      return;
-    }
-
-    processTurn();
-  });
-
-  $(".restart").click(function () {
-    if (gameStarted) {
-      resetGame();
-      gameState.scores.player1 = 0;
-      gameState.scores.player2 = 0;
-      updateScoreboard();
-      $("#level-title").text("Game restarted! Select a row to start.");
-    } else {
-      alert("Game not started yet!");
-    }
-  });
+  setupTwoPlayer();
 });
 
-// Create scoreboard elements
-function createScoreboard() {
-  const scoreboard = $('<div id="scoreboard"></div>').css({
-    display: "flex",
-    "justify-content": "space-around",
-    margin: "20px 0",
-    padding: "10px",
-    "background-color": "#f0f0f0",
-    "border-radius": "5px",
-    "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
+function setupTwoPlayer() {
+  // Sound toggle
+  $("#sound-toggle").on("click", function () {
+    soundEnabled = !soundEnabled;
+    $(this).text("Sound: " + (soundEnabled ? "ON" : "OFF"));
   });
 
-  const player1Score = $(
-    '<div class="score-container"><h3>Player 1</h3><p class="score">0</p></div>'
-  );
-  const player2Score = $(
-    '<div class="score-container"><h3>Player 2</h3><p class="score">0</p></div>'
-  );
+  // Random board
+  $("#btn-random-board-2p").on("click", function () {
+    var numHeaps = 2 + Math.floor(Math.random() * 3);
+    var h = [];
+    for (var i = 0; i < numHeaps; i++) {
+      h.push(1 + Math.floor(Math.random() * 7));
+    }
+    $("#heap-config-2p").val(h.join(","));
+    showMsg("Board: [" + h.join(", ") + "]", "info");
+  });
 
-  scoreboard.append(player1Score, player2Score);
+  // Button clicks
+  $(document).on("click", "#game-board .btn", function () {
+    if (!gameStarted || gameOver) return;
+    if (!$(this).is(":visible")) return;
 
-  // Add styles for score containers
-  $("<style>")
-    .prop("type", "text/css")
-    .html(
-      `
-      .score-container {
-        text-align: center;
-        padding: 10px;
-      }
-      .score {
-        font-size: 24px;
-        font-weight: bold;
-        margin: 5px 0;
-      }
-    `
-    )
-    .appendTo("head");
+    var $row = $(this).closest(".row");
+    var rowId = $row.attr("id");
 
-  scoreboard.insertAfter("#level-title");
-}
+    // Enforce same-row selection
+    if (selectedButtons.length > 0 && selectedRow !== rowId) {
+      showMsg("Select from the same heap only!", "error");
+      return;
+    }
 
-// Update scoreboard display
-function updateScoreboard() {
-  $("#scoreboard .score-container:nth-child(1) .score").text(
-    gameState.scores.player1
-  );
-  $("#scoreboard .score-container:nth-child(2) .score").text(
-    gameState.scores.player2
-  );
-}
-
-// Handle row selection logic
-function handleRowSelection($row) {
-  // If we already have a selected row, deselect it
-  if (selectedRow) {
-    selectedRow.removeClass("active-row");
-    selectedRow.find(".btn").removeClass("selected");
-  }
-
-  // If clicking the same row, just deselect it
-  if (selectedRow && selectedRow.get(0) === $row.get(0)) {
-    selectedRow = null;
-    return;
-  }
-
-  // Select the new row
-  $row.addClass("active-row");
-  selectedRow = $row;
-}
-
-// Start the game
-function startGame() {
-  gameStarted = true;
-  $("#game-board").show();
-  $(".container").hide();
-  updateTurnDisplay();
-}
-
-// Process a completed turn
-function processTurn() {
-  // Hide selected buttons
-  $(".btn.selected").hide().removeClass("selected");
-
-  // Remove row selection
-  if (selectedRow) {
-    selectedRow.removeClass("active-row");
-    selectedRow = null;
-  }
-
-  // Check for game over
-  if ($(".btn:visible").length === 0) {
-    gameOver = true;
-
-    // Update scores
-    if (currentPlayer === 1) {
-      gameState.scores.player1++;
+    if ($(this).hasClass("selected")) {
+      $(this).removeClass("selected");
+      selectedButtons = selectedButtons.filter(function (b) { return b !== this; }.bind(this));
+      if (selectedButtons.length === 0) selectedRow = null;
     } else {
-      gameState.scores.player2++;
-    }
+      $(this).addClass("selected");
+      selectedButtons.push(this);
+      selectedRow = rowId;
 
+      if (soundEnabled) {
+        buttonSound.currentTime = 0;
+        buttonSound.play().catch(function () {});
+      }
+    }
+  });
+
+  // Next/Start/Confirm
+  $(".next").on("click", function () {
+    if (!gameStarted) {
+      startTwoPlayerGame();
+      return;
+    }
+    if (gameOver) {
+      resetTwoPlayer();
+      return;
+    }
+    confirmMove();
+  });
+
+  // Restart
+  $(".restart").on("click", function () {
+    scores.player1 = 0;
+    scores.player2 = 0;
     updateScoreboard();
+    resetTwoPlayer();
+  });
 
-    // Update display
-    $("#level-title").text(`Player ${currentPlayer} wins!`);
-
-    // Add option to play again
-    if (!$("#play-again").length) {
-      $('<button id="play-again" class="button">Play Again</button>')
-        .insertAfter(".next")
-        .on("click", function () {
-          resetGame();
-          $(this).remove();
-        });
+  // Theme
+  $(".theme-toggle").on("click", function () {
+    $("body").toggleClass("dark-mode");
+    if ($("body").hasClass("dark-mode")) {
+      $(this).text("☀️");
+      localStorage.setItem("nimlab-theme", "dark");
+    } else {
+      $(this).text("🌙");
+      localStorage.setItem("nimlab-theme", "light");
     }
+  });
 
+  if (localStorage.getItem("nimlab-theme") === "dark") {
+    $("body").addClass("dark-mode");
+    $(".theme-toggle").text("☀️");
+  }
+
+  createScoreboard();
+}
+
+function startTwoPlayerGame() {
+  var configVal = $("#heap-config-2p").val().trim();
+  var parsed = configVal.split(",").map(function (s) { return parseInt(s.trim()); });
+
+  if (parsed.some(isNaN) || parsed.some(function (n) { return n < 1; }) || parsed.length < 2) {
+    showMsg("Invalid config. Use comma-separated numbers >= 1 (min 2 heaps).", "error");
+    return;
+  }
+  if (parsed.length > 6 || parsed.some(function (n) { return n > 10; })) {
+    showMsg("Max 6 heaps, max size 10.", "error");
     return;
   }
 
-  // Switch players and update display
-  currentPlayer = currentPlayer === 1 ? 2 : 1;
-  updateTurnDisplay();
-}
-
-// Reset the game for a new round
-function resetGame() {
-  // Reset game state
-  gameStarted = gameOver ? false : true;
+  heaps = parsed.slice();
+  gameStarted = true;
   gameOver = false;
+  currentPlayer = 1;
+  selectedButtons = [];
   selectedRow = null;
 
-  // Show all buttons
-  $(".btn").show().removeClass("selected");
-  $(".row").removeClass("active-row");
+  buildBoard();
+  updateDisplay();
+  $(".next").text("Confirm Move");
+}
 
-  // If this is a new game after a completed one, start immediately
-  if (!gameStarted) {
-    startGame();
-  } else {
-    // Otherwise just update the display
-    updateTurnDisplay();
+function buildBoard() {
+  var $board = $("#game-board");
+  $board.empty();
+
+  for (var i = 0; i < heaps.length; i++) {
+    var $row = $('<div class="row"></div>').attr("id", "row" + (i + 1));
+    $row.append('<span class="row-label">Heap ' + (i + 1) + " (" + heaps[i] + ")</span>");
+    for (var j = 0; j < heaps[i]; j++) {
+      $row.append('<button type="button" class="btn" data-row="' + i + '" data-index="' + j + '"></button>');
+    }
+    $board.append($row);
   }
 }
 
-// Update the turn display
-function updateTurnDisplay() {
-  $("#level-title").text(`Player ${currentPlayer}'s Turn`);
+function confirmMove() {
+  if (selectedButtons.length === 0) {
+    showMsg("Select at least one stone!", "error");
+    return;
+  }
+
+  var rowIndex = parseInt($(selectedButtons[0]).attr("data-row"));
+  var count = selectedButtons.length;
+
+  if (count > heaps[rowIndex]) {
+    showMsg("Invalid move.", "error");
+    return;
+  }
+
+  heaps[rowIndex] -= count;
+  selectedButtons = [];
+  selectedRow = null;
+
+  // Check game over
+  var total = heaps.reduce(function (a, b) { return a + b; }, 0);
+  if (total === 0) {
+    gameOver = true;
+    // Misère: last mover loses, so the other player wins
+    var winner = (currentPlayer === 1) ? 2 : 1;
+    scores["player" + winner]++;
+    updateScoreboard();
+    $("#level-title").text("Player " + winner + " Wins!");
+    $("#turn-indicator").text("Player " + winner + " Wins!");
+    $(".next").text("New Game");
+    return;
+  }
+
+  currentPlayer = (currentPlayer === 1) ? 2 : 1;
+  buildBoard();
+  updateDisplay();
+}
+
+function resetTwoPlayer() {
+  gameStarted = false;
+  gameOver = false;
+  currentPlayer = 1;
+  selectedButtons = [];
+  selectedRow = null;
+
+  var configVal = $("#heap-config-2p").val().trim();
+  var parsed = configVal.split(",").map(function (s) { return parseInt(s.trim()); });
+  if (!parsed.some(isNaN) && parsed.length >= 2) {
+    heaps = parsed.slice();
+  } else {
+    heaps = [1, 3, 5];
+  }
+
+  buildBoard();
+  $("#level-title").text("Press Start to Begin");
+  $("#turn-indicator").text("Player 1's Turn");
+  $(".next").text("Start");
+}
+
+function updateDisplay() {
+  $("#level-title").text("Player " + currentPlayer + "'s Turn");
+  $("#turn-indicator").text("Player " + currentPlayer + "'s Turn");
+}
+
+function createScoreboard() {
+  var html = '<div class="stats-panel" style="margin-top:20px">';
+  html += "<h3>Score</h3>";
+  html += '<div class="stats-content">';
+  html += '<div class="stat-item"><span class="stat-label">P1:</span> <span id="score-p1">0</span></div>';
+  html += '<div class="stat-item"><span class="stat-label">P2:</span> <span id="score-p2">0</span></div>';
+  html += "</div></div>";
+  $("#scoreboard").html(html);
+}
+
+function updateScoreboard() {
+  $("#score-p1").text(scores.player1);
+  $("#score-p2").text(scores.player2);
+}
+
+function showMsg(message, type) {
+  var $msg = $("#game-message");
+  if ($msg.length === 0) {
+    $msg = $('<div id="game-message"></div>');
+    $(".controls").after($msg);
+  }
+  $msg.text(message).removeClass("info error success").addClass(type).fadeIn(200);
+  setTimeout(function () { $msg.fadeOut(500); }, 3000);
 }

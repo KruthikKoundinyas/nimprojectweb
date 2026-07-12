@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#011F3F"/>
+      <stop offset="100%" style="stop-color:#0a2a4a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4c90af"/>
+      <stop offset="100%" style="stop-color:#7cc6e9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.05" stroke="#7cc6e9" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Left side: Game visualization -->
+  <g transform="translate(80, 180)">
+    <!-- Heap 1 -->
+    <circle cx="60" cy="0" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+
+    <!-- Heap 2 -->
+    <circle cx="30" cy="70" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="70" cy="70" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="110" cy="70" r="18" fill="#FF5E5B" stroke="#FF5E5B" stroke-width="2"/>
+
+    <!-- Heap 3 -->
+    <circle cx="10" cy="140" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="50" cy="140" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="90" cy="140" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="130" cy="140" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+    <circle cx="170" cy="140" r="18" fill="#FEF2BF" stroke="#333" stroke-width="2"/>
+
+    <!-- Labels -->
+    <text x="220" y="5" fill="#7cc6e9" font-family="monospace" font-size="14">Heap 1: 1 (0001)</text>
+    <text x="220" y="75" fill="#7cc6e9" font-family="monospace" font-size="14">Heap 2: 3 (0011)</text>
+    <text x="220" y="145" fill="#7cc6e9" font-family="monospace" font-size="14">Heap 3: 5 (0101)</text>
+
+    <!-- XOR line -->
+    <line x1="220" y1="170" x2="420" y2="170" stroke="#4c90af" stroke-width="2"/>
+    <text x="220" y="200" fill="#FEF2BF" font-family="monospace" font-size="16" font-weight="bold">Nim Sum = 7 (0111)</text>
+    <text x="220" y="230" fill="#71EFB0" font-family="monospace" font-size="12">Winning position</text>
+  </g>
+
+  <!-- Right side: Title and description -->
+  <g transform="translate(580, 120)">
+    <!-- Logo -->
+    <text x="0" y="0" fill="#FEF2BF" font-family="monospace" font-size="48" font-weight="bold">NimLab</text>
+
+    <!-- Subtitle -->
+    <text x="0" y="50" fill="#7cc6e9" font-family="monospace" font-size="16">Game Theory &amp; Reinforcement</text>
+    <text x="0" y="75" fill="#7cc6e9" font-family="monospace" font-size="16">Learning Playground</text>
+
+    <!-- Divider -->
+    <rect x="0" y="100" width="80" height="3" fill="url(#accent)" rx="1"/>
+
+    <!-- Features -->
+    <text x="0" y="145" fill="#FEFEEF" font-family="monospace" font-size="13">4 AI Strategies</text>
+    <text x="0" y="175" fill="#FEFEEF" font-family="monospace" font-size="13">Explainable AI Inspector</text>
+    <text x="0" y="205" fill="#FEFEEF" font-family="monospace" font-size="13">XOR vs Q-Learning</text>
+    <text x="0" y="235" fill="#FEFEEF" font-family="monospace" font-size="13">Interactive Tutorials</text>
+
+    <!-- Comparison bar -->
+    <rect x="0" y="280" width="360" height="30" rx="15" fill="rgba(76,144,175,0.2)"/>
+    <rect x="0" y="280" width="230" height="30" rx="15" fill="#4c90af"/>
+    <text x="80" y="300" fill="white" font-family="monospace" font-size="11">Optimal 64%</text>
+    <rect x="230" y="280" width="130" height="30" rx="15" fill="#FF5E5B"/>
+    <text x="260" y="300" fill="white" font-family="monospace" font-size="11">Q-Learn 36%</text>
+  </g>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="580" width="1200" height="50" fill="rgba(0,0,0,0.3)"/>
+  <text x="80" y="612" fill="#666" font-family="monospace" font-size="13">github.com/KruthikKoundinyas/nimlab</text>
+  <text x="900" y="612" fill="#666" font-family="monospace" font-size="13">kruthik.vercel.app</text>
+</svg>

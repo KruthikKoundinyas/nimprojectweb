@@ -1,0 +1,23 @@
+{
+  "name": "NimLab — Game Theory & Reinforcement Learning Playground",
+  "short_name": "NimLab",
+  "description": "An interactive educational platform demonstrating how mathematical optimization (XOR) and reinforcement learning (Q-Learning) solve strategic decision-making problems.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#011F3F",
+  "theme_color": "#011F3F",
+  "orientation": "any",
+  "categories": ["education", "games"],
+  "icons": [
+    {
+      "src": "./assets/images/nim-Game.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/images/nim-Game.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -3,79 +3,105 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Play the classic NIM game against an AI opponent with multiple difficulty levels" />
-    <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
-    <title>NIM Game - Single Player</title>
+    <meta name="description" content="Play Misère Nim against 4 AI strategies — Random, Greedy, Optimal XOR, and Q-Learning. See the Algorithm Inspector explain every AI move." />
+    <meta name="keywords" content="nim game AI, play nim online, nim strategy, q-learning game, XOR nim, game theory AI" />
+    <meta name="author" content="Kruthik Koundinyas" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#011F3F" />
+    <meta property="og:title" content="NimLab — Play vs AI" />
+    <meta property="og:description" content="Challenge 4 AI strategies in Misère Nim. Watch the Algorithm Inspector explain Nim Sum, optimal moves, and Q-Learning confidence in real time." />
+    <meta property="og:image" content="./assets/images/og-image.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="NimLab — Play vs AI" />
+    <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/one-player.html" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="manifest" href="./manifest.json" />
+    <title>NimLab — Play vs AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="./css/styles.css" />
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   </head>
   <body>
     <header>
       <a href="./index.html">
         <div type="button" id="returnButton" class="button">
-          Return to Main Menu
+          ← Main Menu
         </div>
       </a>
-      <h1 id="level-title">Press Next Button to Start</h1>
+      <button type="button" class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <h1 id="level-title">Choose Difficulty & Press Start</h1>
     </header>
-    
+
     <main>
-      <div class="game-container">
-        <div class="turn-indicator">Your Turn</div>
-        
-        <div id="game-board">
-          <div class="row" id="row1">
-            <div type="button" id="but1" class="btn"></div>
+      <div class="play-layout">
+        <div class="play-main">
+          <div class="game-container">
+            <div class="turn-indicator" id="turn-indicator">Your Turn</div>
+
+            <div class="board-config">
+              <label for="heap-config">Heaps:</label>
+              <input type="text" id="heap-config" value="1,3,5" class="heap-input" title="Comma-separated heap sizes (e.g. 1,3,5 or 2,4,6)">
+              <button type="button" class="btn-sm" id="btn-random-board">Random</button>
+            </div>
+
+            <div id="game-board"></div>
+
+            <div class="controls">
+              <button type="button" class="restart button">Restart</button>
+              <button type="button" class="next button">Start</button>
+            </div>
+
+            <div class="difficulty">
+              <button type="button" class="diff-btn random active" data-difficulty="random">Random</button>
+              <button type="button" class="diff-btn greedy" data-difficulty="greedy">Greedy</button>
+              <button type="button" class="diff-btn optimal" data-difficulty="optimal">Optimal (XOR)</button>
+              <button type="button" class="diff-btn qlearning" data-difficulty="qlearning">Q-Learning</button>
+            </div>
+
+            <button type="button" id="sound-toggle" class="button">Sound: ON</button>
+
+            <div id="game-message"></div>
+
+            <div class="move-log" id="move-log" style="display:none">
+              <h3>Move History</h3>
+              <div class="log-entries" id="log-entries"></div>
+            </div>
+
+            <div id="stats-panel" class="stats-panel" style="display:none">
+              <h3>Your Stats</h3>
+              <div class="stats-content">
+                <div class="stat-item"><span class="stat-label">Wins:</span> <span class="wins">0</span></div>
+                <div class="stat-item"><span class="stat-label">Losses:</span> <span class="losses">0</span></div>
+                <div class="stat-item"><span class="stat-label">Streak:</span> <span class="streak">0</span></div>
+                <div class="stat-item"><span class="stat-label">Best:</span> <span class="highest-streak">0</span></div>
+              </div>
+            </div>
           </div>
-          <div class="row" id="row2">
-            <div type="button" id="but2" class="btn"></div>
-            <div type="button" id="but3" class="btn"></div>
-            <div type="button" id="but4" class="btn"></div>
+        </div>
+
+        <aside class="inspector-panel" id="inspector-panel" aria-label="Algorithm Inspector">
+          <h3>Algorithm Inspector</h3>
+          <div class="inspector-content" id="inspector-content" aria-live="polite">
+            <p class="inspector-placeholder">Start a game to see AI analysis</p>
           </div>
-          <div class="row" id="row3">
-            <div type="button" id="but5" class="btn"></div>
-            <div type="button" id="but6" class="btn"></div>
-            <div type="button" id="but7" class="btn"></div>
-            <div type="button" id="but8" class="btn"></div>
-            <div type="button" id="but9" class="btn"></div>
-          </div>
-        </div>
-        
-        <div class="controls">
-          <button class="restart button">Restart</button>
-          <button class="next button">Next</button>
-        </div>
-        
-        <div class="difficulty">
-          <button class="easy active">Easy</button>
-          <button class="medium">Medium</button>
-          <button class="hard">Hard</button>
-          <button class="q-learning">Learning AI</button>
-        </div>
-        <button id="sound-toggle" class="button">Sound: ON</button>
-        <div class="game-rules">
-          <h2>How to Play</h2>
-          <ul id="howto">
-            <li>Select objects from a single row</li>
-            <li>Take turns with the AI removing objects</li>
-            <li>The player who takes the last object loses</li>
-          </ul>
-        </div>
+        </aside>
       </div>
     </main>
-    
+
     <footer>
       <div class="footer">
-        <p>Created by Koundinya</p>
+        <p>NimLab — Exploring Game Theory & Reinforcement Learning</p>
         <a href="https://github.com/KruthikKoundinyas/nimprojectweb" aria-label="GitHub Repository">
-          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+          <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" class="octicon octicon-mark-github v-align-middle color-fg-default">
             <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
           </svg>
         </a>
       </div>
     </footer>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./js/ai.js"></script>
     <script src="./js/game-core.js"></script>
     <script src="./js/one-player.js"></script>
   </body>
