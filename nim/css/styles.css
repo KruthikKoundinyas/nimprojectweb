@@ -5,7 +5,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -32,9 +34,15 @@
   padding: 0;
 }
 
+html {
+  background-color: #0d1117;
+  transition: background-color 0.3s;
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Press Start 2P', cursive;
-  background-color: #0d1117;
+  background-color: transparent;
   color: #e6edf3;
   text-align: center;
   line-height: 1.6;
@@ -42,7 +50,18 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background-color 0.3s, color 0.3s;
+  transition: color 0.3s;
+  overflow-x: hidden;
+}
+
+header {
+  position: relative;
+  padding-right: 50px;
+}
+
+header, main, footer, nav {
+  position: relative;
+  z-index: 1;
 }
 
 main {
@@ -757,10 +776,8 @@ footer {
 }
 
 /* --- DARK MODE (lighter variant) --- */
-body.dark-mode {
-  background-color: #000000;
-  color: #e6edf3;
-}
+body.dark-mode { color: #e6edf3; }
+html:has(body.dark-mode) { background-color: #000000; }
 
 body.dark-mode .nav-card,
 body.dark-mode #game-board,
@@ -1646,21 +1663,91 @@ body.dark-mode .sim-stone.gone {
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 600px) {
-  h1 { font-size: 1.8rem; }
-  h2 { font-size: 0.9rem; }
+
+/* Tablet */
+@media (max-width: 900px) {
+  body { padding: 15px; }
+  h1 { font-size: 2rem; }
+  main { padding: 15px; }
 
   .main-nav {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .results-summary {
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .nav-card {
-    padding: 15px 10px;
+  .source-tooltip { width: 250px; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 0.85rem; }
+  h3 { font-size: 0.75rem; }
+  main { padding: 10px; }
+
+  .subtitle { font-size: 0.6rem; margin-bottom: 20px; }
+
+  .main-nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 10px;
   }
 
-  .nav-icon { font-size: 1.5rem; }
-  .nav-label { font-size: 0.7rem; }
+  .nav-card { padding: 14px 8px; border-radius: 10px; }
+  .nav-icon { font-size: 1.4rem; margin-bottom: 8px; }
+  .nav-label { font-size: 0.65rem; }
+  .nav-desc { font-size: 0.5rem; }
+
+  .feature-grid { grid-template-columns: 1fr; gap: 12px; }
+  .feature-item { padding: 14px; }
+  .feature-item h3 { font-size: 0.65rem; }
+  .feature-item p { font-size: 0.6rem; }
+
+  .game-container { padding: 0; }
+  #game-board { padding: 12px; border-radius: 10px; }
+
+  .board-config { flex-wrap: wrap; gap: 8px; font-size: 0.6rem; }
+  .heap-input { width: 80px; font-size: 0.7rem; }
+
+  .row { gap: 5px; padding: 6px; min-height: 40px; }
+  .row-label { font-size: 0.5rem; min-width: 55px; margin-right: 5px; }
+
+  .btn { width: 32px; height: 32px; }
+
+  .controls { gap: 10px; }
+  .button, .restart, .next {
+    padding: 8px 14px;
+    font-size: 0.6rem;
+    min-width: 100px;
+  }
+
+  .difficulty { gap: 6px; }
+  .difficulty button, .diff-btn { padding: 6px 10px; font-size: 0.5rem; }
+
+  .turn-indicator, #turn-indicator { font-size: 0.8rem; padding: 8px 14px; }
+  #game-message { font-size: 0.6rem; max-width: 95%; }
+
+  .inspector-panel { padding: 14px; border-radius: 10px; }
+  .inspector-panel h3 { font-size: 0.7rem; }
+  .insp-section h4 { font-size: 0.6rem; }
+
+  .move-log { padding: 12px; }
+  .move-log h3 { font-size: 0.6rem; }
+  .log-entries { font-size: 0.5rem; }
+
+  .stats-panel { padding: 12px; max-width: 100%; }
+  .stats-content { gap: 6px; }
+  .stat-item { font-size: 0.55rem; padding: 6px; }
 
   .strategy-rules,
   .learn-compare,
@@ -1668,36 +1755,54 @@ body.dark-mode .sim-stone.gone {
     grid-template-columns: 1fr;
   }
 
-  .compare-setup {
-    flex-direction: column;
-    gap: 15px;
-  }
+  .learn-tabs { gap: 5px; margin-bottom: 18px; }
+  .learn-tab { font-size: 0.5rem; padding: 6px 10px; }
 
-  .results-summary {
-    grid-template-columns: 1fr;
-  }
+  .learn-panel p { font-size: 0.6rem; line-height: 1.8; }
+  .learn-panel ul { font-size: 0.55rem; padding-left: 18px; }
+  .learn-example { padding: 14px; margin: 14px 0; }
+  .learn-example h4 { font-size: 0.6rem; }
+  .learn-example p { font-size: 0.55rem; }
 
-  .btn, .row-label {
-    font-size: 0.55rem;
-  }
+  .learn-calculator { padding: 14px; }
+  .calc-row { font-size: 0.55rem; gap: 6px; }
+  .calc-row label { min-width: 55px; }
+  .calc-row input { width: 42px; font-size: 0.65rem; }
 
-  .row-label {
-    min-width: 60px;
-  }
+  .formula { font-size: 0.6rem; padding: 10px; }
+  .formula-legend { font-size: 0.5rem; gap: 8px; }
 
-  .sim-stone {
-    width: 16px;
-    height: 16px;
-  }
+  .strategy-steps { font-size: 0.55rem; padding-left: 18px; }
 
-  .sim-scoreboard {
-    font-size: 1.2rem;
-  }
+  .concept-card { padding: 10px; }
+  .concept-card h4 { font-size: 0.5rem; }
+  .concept-card p { font-size: 0.5rem; }
 
-  .source-tooltip {
-    width: 220px;
-    padding: 10px 12px;
-  }
+  .compare-card h4 { font-size: 0.6rem; }
+  .compare-card p { font-size: 0.5rem; }
+
+  .compare-setup { flex-direction: column; gap: 12px; }
+  .compare-player select { font-size: 0.5rem; padding: 6px 10px; }
+  .compare-vs { font-size: 1.2rem; }
+  .compare-config { font-size: 0.55rem; gap: 8px; }
+
+  .result-card { padding: 14px; }
+  .result-winrate { font-size: 1.4rem; }
+
+  .sim-stone { width: 16px; height: 16px; }
+  .sim-scoreboard { font-size: 1.1rem; gap: 10px; }
+  .sim-heap-label { font-size: 0.5rem; }
+  .sim-move-info { font-size: 0.5rem; }
+
+  .real-tech-section { margin-top: 25px; padding-top: 22px; }
+  .real-tech-section h2 { font-size: 0.8rem; }
+  .real-tech-section p { font-size: 0.55rem; }
+
+  .source-link a { font-size: 0.5rem; }
+  .source-tooltip { width: 200px; padding: 10px; }
+  .tooltip-title { font-size: 0.45rem; }
+  .tooltip-desc { font-size: 0.45rem; }
+  .tooltip-url { font-size: 0.4rem; }
 
   .source-link.tooltip-right .source-tooltip,
   .source-link.tooltip-left .source-tooltip,
@@ -1720,4 +1825,32 @@ body.dark-mode .sim-stone.gone {
     right: auto;
     transform: none;
   }
+
+  .footer { font-size: 0.5rem; gap: 10px; }
+  .footer svg { width: 24px; height: 24px; }
+
+  #returnButton { font-size: 0.6rem; padding: 8px 14px; }
+  .theme-toggle { font-size: 1.2rem; top: 12px; right: 12px; }
+
+  .popup-button { font-size: 0.6rem; padding: 10px 16px; }
+  .popup-content { font-size: 0.6rem; }
+}
+
+/* Small mobile */
+@media (max-width: 380px) {
+  h1 { font-size: 1.2rem; }
+  body { padding: 8px; }
+
+  .main-nav { grid-template-columns: 1fr; gap: 8px; }
+  .nav-card { flex-direction: row; gap: 10px; padding: 12px; }
+  .nav-icon { font-size: 1.2rem; margin-bottom: 0; }
+
+  .learn-tabs { gap: 4px; }
+  .learn-tab { font-size: 0.45rem; padding: 5px 8px; }
+
+  .btn { width: 28px; height: 28px; }
+  .row { gap: 4px; }
+
+  .controls { flex-direction: column; align-items: center; }
+  .button, .restart, .next { width: 100%; max-width: 260px; }
 }
