@@ -84,6 +84,23 @@ The Q-Learning agent converges toward optimal play but doesn't fully match it �
 
 ---
 
+## Where These Concepts Live in Industry
+
+The algorithms in this project aren't academic exercises — they're the foundations of billion-dollar systems:
+
+| Concept (in NimLab) | Real-World Technology |
+|---------------------|---------------------|
+| **XOR / Nim Sum** | RAID storage (disk parity recovery), AES encryption, SHA-256 (Bitcoin mining), error-correcting codes (Hamming, CRC), TCP/IP checksums |
+| **Q-Learning** | AlphaGo/AlphaZero (DeepMind), OpenAI Five (Dota 2), AlphaStar (StarCraft II), robotics control, autonomous trading |
+| **RLHF (scaled RL)** | ChatGPT alignment, Claude, Gemini — how LLMs learn to be useful from human preferences |
+| **ε-Greedy (explore/exploit)** | Google/Meta ad serving (multi-armed bandits), Netflix/YouTube recommendations, adaptive clinical drug trials |
+| **Game Theory** | Auction design (Google Ads, spectrum), matching markets (kidney exchanges), network routing, Nash equilibrium in pricing |
+| **Combinatorial Games** | Nimrod (1951) — one of the first digital computers ever built, designed to play Nim |
+
+The through-line: a XOR strategy that solves a toy game is the same math that protects bank transactions. A Q-table learning optimal play through self-play is the same idea — scaled up — behind AlphaGo and ChatGPT's training pipeline.
+
+---
+
 ## Architecture
 
 ```

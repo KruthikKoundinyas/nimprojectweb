@@ -1,5 +1,14 @@
 /* NimLab - Neon Modern UI */
 
+/* Animated Background Canvas */
+.bg-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Accessibility: Skip to content link */
 .skip-link {
   position: absolute;
@@ -1500,6 +1509,142 @@ body.dark-mode .sim-stone.gone {
 .sim-move-info .agent-a { color: #00e5ff; }
 .sim-move-info .agent-b { color: #ff2d55; }
 
+/* --- REAL TECH SECTION (always visible) --- */
+.real-tech-section {
+  margin-top: 35px;
+  padding-top: 30px;
+  border-top: 1px solid #30363d;
+}
+
+.real-tech-section h2 {
+  margin-bottom: 20px;
+}
+
+.real-tech-section p {
+  font-size: 0.65rem;
+  color: #8b949e;
+  font-family: 'Courier New', monospace;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+/* --- SOURCE TOOLTIPS --- */
+.source-link {
+  position: relative;
+  display: inline-block;
+}
+
+.source-link a {
+  color: #00e5ff;
+  text-decoration: none;
+  font-size: 0.6rem;
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.4);
+  transition: all 0.2s;
+}
+
+.source-link a:hover {
+  color: #7ee8fa;
+  border-bottom-color: #7ee8fa;
+}
+
+.source-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  background: #0d1117;
+  border: 1px solid #00e5ff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.15), 0 8px 30px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  transform: translateX(-50%) translateY(4px);
+  pointer-events: none;
+  text-align: left;
+}
+
+.source-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #00e5ff;
+}
+
+.source-link:hover .source-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.tooltip-icon {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.tooltip-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: #00e5ff;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.tooltip-desc {
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  color: #8b949e;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.tooltip-url {
+  font-family: 'Courier New', monospace;
+  font-size: 0.5rem;
+  color: #484f58;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Keep tooltip in viewport on left/right edges */
+.source-link.tooltip-right .source-tooltip {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.source-link.tooltip-right:hover .source-tooltip {
+  transform: translateX(0) translateY(0);
+}
+
+.source-link.tooltip-right .source-tooltip::after {
+  left: 20px;
+  transform: none;
+}
+
+.source-link.tooltip-left .source-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.source-link.tooltip-left:hover .source-tooltip {
+  transform: translateX(0) translateY(0);
+}
+
+.source-link.tooltip-left .source-tooltip::after {
+  left: auto;
+  right: 20px;
+  transform: none;
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 600px) {
   h1 { font-size: 1.8rem; }
@@ -1547,5 +1692,32 @@ body.dark-mode .sim-stone.gone {
 
   .sim-scoreboard {
     font-size: 1.2rem;
+  }
+
+  .source-tooltip {
+    width: 220px;
+    padding: 10px 12px;
+  }
+
+  .source-link.tooltip-right .source-tooltip,
+  .source-link.tooltip-left .source-tooltip,
+  .source-link .source-tooltip {
+    left: 0;
+    right: auto;
+    transform: translateX(0) translateY(4px);
+  }
+
+  .source-link.tooltip-right:hover .source-tooltip,
+  .source-link.tooltip-left:hover .source-tooltip,
+  .source-link:hover .source-tooltip {
+    transform: translateX(0) translateY(0);
+  }
+
+  .source-link.tooltip-right .source-tooltip::after,
+  .source-link.tooltip-left .source-tooltip::after,
+  .source-link .source-tooltip::after {
+    left: 20px;
+    right: auto;
+    transform: none;
   }
 }

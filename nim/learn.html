@@ -15,6 +15,9 @@
     <meta name="twitter:title" content="NimLab — Learn Game Theory" />
     <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/learn.html" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
     <link rel="manifest" href="./manifest.json" />
     <title>NimLab — Learn</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -90,18 +93,38 @@
               <h4>Interactive XOR Calculator</h4>
               <div class="calc-inputs" id="calc-inputs">
                 <div class="calc-row">
-                  <label>Heap 1:</label>
-                  <input type="number" class="calc-heap" value="1" min="0" max="15">
+                  <label for="heap1">Heap 1:</label>
+                  <input
+                    id="heap1"
+                    type="number"
+                    class="calc-heap"
+                    value="1"
+                    min="0"
+                    max="15">
                   <span class="calc-binary"></span>
                 </div>
+
                 <div class="calc-row">
-                  <label>Heap 2:</label>
-                  <input type="number" class="calc-heap" value="3" min="0" max="15">
+                  <label for="heap2">Heap 2:</label>
+                  <input
+                    id="heap2"
+                    type="number"
+                    class="calc-heap"
+                    value="3"
+                    min="0"
+                    max="15">
                   <span class="calc-binary"></span>
                 </div>
+
                 <div class="calc-row">
-                  <label>Heap 3:</label>
-                  <input type="number" class="calc-heap" value="5" min="0" max="15">
+                  <label for="heap3">Heap 3:</label>
+                  <input
+                    id="heap3"
+                    type="number"
+                    class="calc-heap"
+                    value="5"
+                    min="0"
+                    max="15">
                   <span class="calc-binary"></span>
                 </div>
               </div>
@@ -288,6 +311,186 @@
               </ul>
               <p>The educational value is in seeing that experience-based learning can approximate analytical perfection — and understanding when and why it falls short.</p>
             </div>
+
+          </div>
+        </div>
+
+        <div class="real-tech-section">
+          <h2>Where These Concepts Power Real Tech</h2>
+          <div class="learn-example">
+            <h4>XOR / Nim Sum</h4>
+            <p><strong>RAID storage</strong> — disk parity recovery uses XOR to rebuild lost data from surviving disks.
+              <span class="source-link tooltip-right">
+                <a href="https://www.redhat.com/en/topics/data-storage/what-is-raid" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">💾</span>
+                  <span class="tooltip-title">Red Hat — RAID Parity Guide</span>
+                  <span class="tooltip-desc">Official Red Hat documentation explaining RAID levels and how XOR parity rebuilds lost data from surviving disks.</span>
+                  <span class="tooltip-url">redhat.com/en/topics/data-storage/what-is-raid</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>AES encryption</strong> — every secure HTTPS connection uses XOR as a core cipher operation.
+              <span class="source-link tooltip-right">
+                <a href="https://csrc.nist.gov/projects/aes" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🔒</span>
+                  <span class="tooltip-title">NIST — Advanced Encryption Standard</span>
+                  <span class="tooltip-desc">The official NIST AES project page. AES (FIPS 197) is the symmetric cipher standard used worldwide for secure communications.</span>
+                  <span class="tooltip-url">csrc.nist.gov/projects/aes</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Bitcoin mining</strong> — SHA-256 hashing is built on XOR operations at massive scale.
+              <span class="source-link tooltip-right">
+                <a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">₿</span>
+                  <span class="tooltip-title">NIST FIPS 180-4 — SHA-256 Standard</span>
+                  <span class="tooltip-desc">The federal standard defining SHA-256, the hash function at the core of Bitcoin's proof-of-work mining.</span>
+                  <span class="tooltip-url">csrc.nist.gov/pubs/fips/180-4/upd1/final</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Error correction</strong> — Hamming codes, CRC checksums, TCP/IP integrity all rely on XOR parity.
+              <span class="source-link tooltip-right">
+                <a href="https://en.wikipedia.org/wiki/Hamming_code" target="_blank" rel="noopener">Hamming codes</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">📡</span>
+                  <span class="tooltip-title">Wikipedia — Hamming Code</span>
+                  <span class="tooltip-desc">Hamming codes use XOR parity bits to detect and correct single-bit errors in transmitted data. Invented by Richard Hamming in 1950.</span>
+                  <span class="tooltip-url">en.wikipedia.org/wiki/Hamming_code</span>
+                </span>
+              </span>
+              <span class="source-link tooltip-right">
+                <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check" target="_blank" rel="noopener">CRC</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">📡</span>
+                  <span class="tooltip-title">Wikipedia — Cyclic Redundancy Check</span>
+                  <span class="tooltip-desc">CRC checksums use polynomial division (implemented via XOR) to detect accidental changes to data in networks and storage.</span>
+                  <span class="tooltip-url">en.wikipedia.org/wiki/Cyclic_redundancy_check</span>
+                </span>
+              </span>
+            </p>
+          </div>
+          <div class="learn-example">
+            <h4>Q-Learning / Reinforcement Learning</h4>
+            <p><strong>AlphaGo & AlphaZero</strong> — DeepMind used RL + self-play to beat world champions at Go, then mastered Chess from scratch in 4 hours.
+              <span class="source-link">
+                <a href="https://deepmind.google/research/alphago/" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">♟️</span>
+                  <span class="tooltip-title">Google DeepMind — AlphaGo</span>
+                  <span class="tooltip-desc">DeepMind's AlphaGo project page. AlphaZero later generalized to Chess and Shogi, learning superhuman play from scratch via self-play RL.</span>
+                  <span class="tooltip-url">deepmind.google/research/alphago</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>ChatGPT / LLM alignment</strong> — RLHF (Reinforcement Learning from Human Feedback) is how language models learn to be helpful.
+              <span class="source-link">
+                <a href="https://openai.com/index/learning-from-human-preferences/" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">💬</span>
+                  <span class="tooltip-title">OpenAI — Learning from Human Preferences</span>
+                  <span class="tooltip-desc">OpenAI's research on RLHF — training language models to follow instructions by learning from human feedback, the same explore-exploit principle used in NimLab.</span>
+                  <span class="tooltip-url">openai.com/index/learning-from-human-preferences</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>OpenAI Five</strong> — beat Dota 2 world champions using the same explore-exploit tradeoff you see in NimLab's ε-greedy policy.
+              <span class="source-link">
+                <a href="https://openai.com/index/openai-five/" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🎮</span>
+                  <span class="tooltip-title">OpenAI — OpenAI Five</span>
+                  <span class="tooltip-desc">OpenAI Five defeated world champion Dota 2 players using large-scale deep reinforcement learning with the same ε-greedy exploration strategy.</span>
+                  <span class="tooltip-url">openai.com/index/openai-five</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Self-driving cars</strong> — real-time decision-making in autonomous vehicles uses deep RL.
+              <span class="source-link">
+                <a href="https://arxiv.org/abs/1808.00177" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🚗</span>
+                  <span class="tooltip-title">arXiv — Deep RL Overview (Survey)</span>
+                  <span class="tooltip-desc">Comprehensive survey paper covering deep reinforcement learning techniques used in autonomous driving, robotics, and real-time control systems.</span>
+                  <span class="tooltip-url">arxiv.org/abs/1808.00177</span>
+                </span>
+              </span>
+            </p>
+          </div>
+          <div class="learn-example">
+            <h4>Explore vs Exploit (ε-Greedy)</h4>
+            <p><strong>Google/Meta ad systems</strong> — multi-armed bandit algorithms decide which ad to show you, balancing known performers vs testing new ones.
+              <span class="source-link">
+                <a href="https://inst.eecs.berkeley.edu/~cs188/textbook/rl/eae.html" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🎲</span>
+                  <span class="tooltip-title">UC Berkeley CS188 — Exploration vs Exploitation</span>
+                  <span class="tooltip-desc">Berkeley's AI course textbook chapter on the explore-exploit tradeoff, ε-greedy strategies, and multi-armed bandit problems.</span>
+                  <span class="tooltip-url">inst.eecs.berkeley.edu/~cs188/textbook/rl/eae.html</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Netflix/YouTube</strong> — recommendation engines balance showing you things you'll like vs discovering new content.
+              <span class="source-link">
+                <a href="https://developers.google.com/machine-learning/recommendation" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🎬</span>
+                  <span class="tooltip-title">Google — Recommendation Systems Guide</span>
+                  <span class="tooltip-desc">Google's developer guide to building recommendation systems, covering collaborative filtering, content-based approaches, and explore-exploit strategies.</span>
+                  <span class="tooltip-url">developers.google.com/machine-learning/recommendation</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Clinical trials</strong> — adaptive trial design allocates more patients to promising drug candidates using the same explore-exploit math.
+              <span class="source-link">
+                <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/adaptive-design-clinical-trials-drugs-and-biologics-guidance-industry" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🏥</span>
+                  <span class="tooltip-title">FDA — Adaptive Clinical Trial Design</span>
+                  <span class="tooltip-desc">Official FDA guidance on adaptive clinical trial designs that use explore-exploit algorithms to allocate patients to more promising treatments.</span>
+                  <span class="tooltip-url">fda.gov/.../adaptive-design-clinical-trials</span>
+                </span>
+              </span>
+            </p>
+          </div>
+          <div class="learn-example">
+            <h4>Game Theory</h4>
+            <p><strong>Nimrod (1951)</strong> — one of the first digital computers ever built was designed specifically to play Nim.
+              <span class="source-link">
+                <a href="https://en.wikipedia.org/wiki/Nimrod_(computer)" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🖥️</span>
+                  <span class="tooltip-title">Wikipedia — Nimrod Computer</span>
+                  <span class="tooltip-desc">The Nimrod was a special-purpose computer built in 1951 by Ferranti specifically to play the game of Nim — one of the earliest digital computers ever created.</span>
+                  <span class="tooltip-url">en.wikipedia.org/wiki/Nimrod_(computer)</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Auction design</strong> — Google Ads, telecom spectrum auctions, and eBay all use game-theoretic mechanism design.
+              <span class="source-link">
+                <a href="https://support.google.com/google-ads/answer/6366577" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">🔨</span>
+                  <span class="tooltip-title">Google — Ads Auction Explained</span>
+                  <span class="tooltip-desc">How Google's ad auction works — a real-world application of game-theoretic mechanism design where bidders compete strategically.</span>
+                  <span class="tooltip-url">support.google.com/google-ads/answer/6366577</span>
+                </span>
+              </span>
+            </p>
+            <p><strong>Nash equilibrium</strong> — underpins modern economics, pricing algorithms, and network routing protocols.
+              <span class="source-link">
+                <a href="https://plato.stanford.edu/entries/game-theory/" target="_blank" rel="noopener">Learn more</a>
+                <span class="source-tooltip">
+                  <span class="tooltip-icon">⚖️</span>
+                  <span class="tooltip-title">Stanford Encyclopedia — Game Theory</span>
+                  <span class="tooltip-desc">The Stanford Encyclopedia of Philosophy's comprehensive entry on game theory, Nash equilibrium, and strategic decision-making foundations.</span>
+                  <span class="tooltip-url">plato.stanford.edu/entries/game-theory</span>
+                </span>
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -370,5 +573,6 @@
         }
       });
     </script>
+    <script src="./js/bg-animation.js"></script>
   </body>
 </html>
