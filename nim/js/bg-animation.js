@@ -4,7 +4,7 @@
   var canvas = document.createElement('canvas');
   canvas.className = 'bg-animation';
   canvas.setAttribute('aria-hidden', 'true');
-  document.body.insertBefore(canvas, document.body.firstChild);
+  document.body.appendChild(canvas);
 
   var ctx = canvas.getContext('2d');
   var particles = [];
@@ -16,8 +16,6 @@
     h = window.innerHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
@@ -60,20 +58,20 @@
   function createParticle(scattered) {
     var type = pick(shapeTypes);
     var size;
-    if (type === 'binary' || type === 'xor') size = rand(18, 36);
-    else if (type === 'dot') size = rand(3, 7);
-    else if (type === 'nodes') size = rand(30, 60);
-    else size = rand(24, 65);
+    if (type === 'binary' || type === 'xor') size = rand(20, 40);
+    else if (type === 'dot') size = rand(3, 8);
+    else if (type === 'nodes') size = rand(35, 70);
+    else size = rand(28, 72);
 
     return {
       x: rand(-60, w + 60),
       y: scattered ? rand(-60, h + 60) : h + rand(40, 200),
       size: size,
-      speed: rand(0.08, 0.28),
+      speed: rand(0.1, 0.3),
       drift: rand(-0.05, 0.05),
       rot: rand(0, 360),
       rotSpeed: rand(-0.15, 0.15),
-      opacity: rand(0.06, 0.14),
+      opacity: rand(0.15, 0.35),
       type: type,
       color: pick(palettes),
       char: Math.random() > 0.5 ? '1' : '0',
@@ -83,7 +81,7 @@
     };
   }
 
-  var count = Math.min(40, Math.max(20, Math.floor(w * h / 30000)));
+  var count = Math.min(45, Math.max(22, Math.floor(w * h / 25000)));
   for (var i = 0; i < count; i++) {
     particles.push(createParticle(true));
   }
@@ -95,7 +93,7 @@
     ctx.lineTo(p.size * 0.866, p.size * 0.5);
     ctx.closePath();
     ctx.strokeStyle = rgba(p.color, p.opacity);
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
   }
 
@@ -110,13 +108,13 @@
     }
     ctx.closePath();
     ctx.strokeStyle = rgba(p.color, p.opacity);
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
   }
 
   function drawBinary(p) {
     ctx.font = 'bold ' + p.size + 'px "Courier New",monospace';
-    ctx.fillStyle = rgba(p.color, p.opacity + 0.02);
+    ctx.fillStyle = rgba(p.color, p.opacity);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(p.char, 0, 0);
@@ -125,7 +123,7 @@
   function drawXor(p) {
     var r = p.size * 0.5;
     ctx.strokeStyle = rgba(p.color, p.opacity);
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.stroke();
@@ -145,7 +143,7 @@
     ctx.lineTo(-p.size * 0.55, 0);
     ctx.closePath();
     ctx.strokeStyle = rgba(p.color, p.opacity);
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
   }
 
@@ -158,7 +156,7 @@
       [-s * 0.35, s * 0.2]
     ];
     ctx.strokeStyle = rgba(p.color, p.opacity * 0.8);
-    ctx.lineWidth = 0.8;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     for (var j = 0; j < pts.length; j++) {
       for (var k = j + 1; k < pts.length; k++) {
@@ -167,10 +165,10 @@
       }
     }
     ctx.stroke();
-    ctx.fillStyle = rgba(p.color, p.opacity + 0.03);
+    ctx.fillStyle = rgba(p.color, p.opacity + 0.05);
     for (var j = 0; j < pts.length; j++) {
       ctx.beginPath();
-      ctx.arc(pts[j][0], pts[j][1], 3, 0, Math.PI * 2);
+      ctx.arc(pts[j][0], pts[j][1], 3.5, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -178,7 +176,7 @@
   function drawDot(p) {
     ctx.beginPath();
     ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = rgba(p.color, p.opacity + 0.03);
+    ctx.fillStyle = rgba(p.color, p.opacity);
     ctx.fill();
   }
 

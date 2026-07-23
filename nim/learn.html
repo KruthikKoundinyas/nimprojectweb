@@ -15,9 +15,7 @@
     <meta name="twitter:title" content="NimLab — Learn Game Theory" />
     <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/learn.html" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
-    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="./assets/images/og-image.svg" />
     <link rel="manifest" href="./manifest.json" />
     <title>NimLab — Learn</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -574,5 +572,10 @@
       });
     </script>
     <script src="./js/bg-animation.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+      }
+    </script>
   </body>
 </html>

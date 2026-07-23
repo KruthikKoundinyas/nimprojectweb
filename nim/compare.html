@@ -15,6 +15,7 @@
     <meta name="twitter:title" content="NimLab — AI Algorithm Comparison" />
     <link rel="canonical" href="https://nimprojectweb.vercel.app/nim/compare.html" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+    <link rel="apple-touch-icon" href="./assets/images/og-image.svg" />
     <link rel="manifest" href="./manifest.json" />
     <title>NimLab — Compare Algorithms</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -379,5 +380,10 @@
       });
     </script>
     <script src="./js/bg-animation.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+      }
+    </script>
   </body>
 </html>
